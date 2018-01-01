@@ -1,7 +1,4 @@
 <template>
-
-<div>
-
 <!-- 
 A couple of things about this form. Autcomplete is off because user will be entering information about upcoming gigs, not their own personal info.
 We have a simplified form of autocomplete to fill data based on previous versions.
@@ -49,22 +46,23 @@ inputs dynamically, so everything is just laid out literally below.
     <textarea v-model="showCells[6].content" rows="5"/>
     <span class="address-details">{{addressDetails}}</span>
   </label>  
-    <label class="lat">
+  <fieldset class="latlong">
+  	<label class="lat">
     <span>{{showCells[7].label}}</span><br>
     <input v-model="showCells[7].content" type="number" step="any"/>
-  </label>  
+  	</label>  
     <label class="long">
     <span>{{showCells[8].label}}</span><br>
     <input v-model="showCells[8].content" type="number" step="any"/>
-  </label>
-  <StandardButton type="submit">Really submit!</StandardButton>  
+  	</label>
+		<standard-button type="button" :onClick="geocode" class="geocode">Check Address</standard-button>
+  </fieldset>
+		<standard-button type="button" :onClick="resetVenueList" class="reset">Clear and Reset Details</standard-button> 
+  	<standard-button type="submit" class="submit">Add Show</standard-button> 
+  
 </form>
-<StandardButton :onClick="resetVenueList">
-  Clear Form Details
-  </StandardButton> 
-    <StandardButton :onClick="geocode">Geocode</StandardButton>
 
-</div>
+
 </template>
 
 <script>
@@ -87,12 +85,11 @@ export default {
 				{type: "number", content: "", label: "Longitude"}
 			],
 			venueSearch: "",
-			addressDetails: '',
+			addressDetails: "",
 			showVenueList: true
 		};
 	},
-	props: {
-	},
+	props: {},
 	methods: {
 		populateVenueDetails(show) {
 			this.venueSearch = show.Venue;
@@ -100,28 +97,26 @@ export default {
 			this.showCells.forEach(cell => {
 				if (cell.label !== "Date" && cell.label !== "Website") {
 					if (cell.label === "Display City") {
-						cell.content = show["City"];
+						cell.content = show["City"]
 					} else if (cell.label === "Full Address") {
-						cell.content = show["Address"];
+						cell.content = show["Address"]
 					} else {
-						cell.content = show[cell.label];
+						cell.content = show[cell.label]
 					}
 				}
-			});
-			this.$emit("update", this.showCells);
-			console.log("tried to emit event");
-			this.showVenueList = false;
+			})
+			this.showVenueList = false
 		},
 		onSubmit() {
-			this.$emit("submit", this.showCells);
+			this.$emit("submit", this.showCells)
+			//this.resetVenueList() -- need to do this only AFTER we have confirmed everything is A-OK.
 		},
 		resetVenueList() {
-			this.showVenueList = true;
-			this.venueSearch = "";
-			this.showCells.forEach(cell => (cell.content = ""));
+			this.showVenueList = true
+			this.venueSearch = ""
+			this.showCells.forEach(cell => (cell.content = ""))
 		},
 		geocode: function() {
-			console.log('geocodin\'');
 			this.$http
 				.get(
 					"https://api.opencagedata.com/geocode/v1/json?q=" +
@@ -133,7 +128,6 @@ export default {
 						try {
 							let location = response.body.results[0];
 							this.addressDetails = `Address found in 
-                                ${location.components.city}, 
                                 ${location.components.state}, 
                                 ${location.components.country}`;
 							this.showCells[7].content = location.geometry.lat;
@@ -178,20 +172,16 @@ export default {
 form {
 	display: grid;
 	grid-gap: 10px;
-	grid-template-columns: 230px 230px 230px;
+	grid-template-columns: 230px 230px;
 }
 
-.description,
-.site {
-	grid-column: 2 / span 2;
+fieldset {
+	border: 0;
 }
 
-.phone {
-	grid-row: 2;
-}
 
-.display-city {
-	grid-row: 3;
+.geocode {
+	margin-top: 10px
 }
 
 input,
@@ -222,6 +212,14 @@ label {
 
 .selected-venue {
 	background-color: yellowgreen;
+}
+
+.submit {
+	background-color: rgb(161, 191, 121);
+}
+
+.reset {
+	background-color: rgb(225, 134, 134);
 }
 
 ul {

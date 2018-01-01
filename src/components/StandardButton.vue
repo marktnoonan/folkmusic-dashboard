@@ -27,11 +27,14 @@ button {
   margin-left: auto;
   margin-right: auto;
   padding: 10px;
-  font-size: large;
+  font-size: 14px;
   border: 0;
+  border-radius: 4px;
   background-color: powderblue
 }
 button:hover {
   background-color: lightgrey
 }
+
+
 </style>
