@@ -61,13 +61,14 @@ inputs dynamically, so everything is just laid out literally below.
   </fieldset>
 		<standard-button type="button" :onClick="resetVenueList" class="reset">Clear and Reset Details</standard-button> 
   	<standard-button type="submit" class="submit">Add Show</standard-button> 
-  
+  {{messageAfterSubmit}}
 </form>
 
 
 </template>
 
 <script>
+import firebase from "firebase"
 import oldShows from "../assets/shows.json"
 import StandardButton from "./StandardButton"
 import DatePicker from 'vue2-datepicker'
@@ -90,7 +91,8 @@ export default {
 			],
 			venueSearch: "",
 			addressDetails: "",
-			showVenueList: true
+			showVenueList: true,
+			messageAfterSubmit: ""
 		};
 	},
 	props: {},
@@ -112,8 +114,37 @@ export default {
 			this.showVenueList = false
 		},
 		onSubmit() {
-			this.$emit("submit", this.showCells)
-			this.resetVenueList()
+			let showCells = this.showCells
+			if (showCells[7].content !== "" && showCells[8].content !== "") {
+				this.safeToAddShow = true;
+			}
+			if (this.safeToAddShow) {
+				let rowContent = showCells.map(cell => {
+					return cell.content;
+        });
+        // format the date for saving as an YYYY-MM-DD string
+        let date = new Date(rowContent[0])
+        rowContent[0] = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+
+				const showRef = firebase.database().ref("showsToAdd");
+				const archiveRef = firebase.database().ref("formSubmissions");
+
+				let instance = this
+        showRef.push(rowContent, function(error) {
+					if (error) {
+            alert("There was an error saving this show.");
+            // if there is an error we need to keep this showCells object and retry.
+            // unless firebase does that automatically.
+					} else {
+						instance.messageAfterSubmit = "Show saved!"
+					}
+				});
+        
+        archiveRef.push(rowContent);
+			} else {
+				alert("Please check the address");
+			}
+		this.resetVenueList()
 		},
 		resetVenueList() {
 			this.showVenueList = true
@@ -153,6 +184,8 @@ export default {
 						console.log(response);
 					}
 				);
+		},
+				submitShow: function(showCells) {
 		}
 	},
 	computed: {

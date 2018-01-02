@@ -3,13 +3,14 @@
     <h3>Sign In</h3>
     <input type="text" v-model="email" placeholder="Email"><br>
     <input type="password" v-model="password" placeholder="Password"><br>
-    <button @click="login">Log In</button>
+    <standard-button :onClick="login">Log In</standard-button>
   </div>
 </template>
 
 <script>
 
   import firebase from 'firebase'
+  import StandardButton from './StandardButton'
 
   export default {
     name: "login",
@@ -30,6 +31,9 @@
           }
         )
       }
+    },
+    components: {
+      StandardButton
     }
   }
 </script>
@@ -42,7 +46,7 @@
 
 input {
   margin: 10px 0;
-  width: 20%;
+  width: 200px;
   padding: 15px;
   font-size: 16px;
 }

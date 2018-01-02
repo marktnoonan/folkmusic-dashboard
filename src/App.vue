@@ -1,13 +1,18 @@
 <template>
   <div id="app">
-    <!-- <img src="./assets/logo.png"> -->
+    <h1 class="main-title">Folkmusic.com Dashboard</h1>
     <router-view/>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  methods: {
+    replaceRoute(route){
+      this.$router.replace(route)  
+    }
+  }
 }
 </script>
 
@@ -18,7 +23,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: left;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 10px;
 }
 .date-input {
   width: 100%;
@@ -26,5 +31,8 @@ export default {
   font-size: 1em;
   color: #000;
   border: 1px solid #575757;
+}
+.main-title {
+  margin-bottom: 0;
 }
 </style>
