@@ -3,20 +3,23 @@
     <h1>Folkmusic.com Dashboard</h1>
     <standard-button :onClick="logout">Log Out</standard-button><br>
       <standard-button :onClick="toggleAddShowForm">Add A Show </standard-button>
-    <AddShowForm 
+    <add-show-form 
     v-if="displayAddShowForm"
     @submit="submitShow"
     />
     {{successMessage}}
+    <news-ticker-editor></news-ticker-editor>
+
 <br><br>
 
   </div>
 </template>
 
 <script>
-import firebase from "firebase";
-import AddShowForm from "./AddShowForm";
-import StandardButton from "./StandardButton";
+import firebase from "firebase"
+import AddShowForm from "./AddShowForm"
+import StandardButton from "./StandardButton"
+import NewsTickerEditor from "./NewsTicker"
 
 export default {
 	name: "Dashboard",
@@ -24,7 +27,8 @@ export default {
 		return {
 			safeToAddShow: false,
       displayAddShowForm: false,
-      successMessage: ''
+      successMessage: '',
+      newsTickerItems: []
 		};
 	},
 	methods: {
@@ -72,8 +76,10 @@ export default {
 	},
 	components: {
 		AddShowForm,
-		StandardButton
-	}
+    StandardButton,
+    NewsTickerEditor
+  }
+  
 };
 </script>
 
