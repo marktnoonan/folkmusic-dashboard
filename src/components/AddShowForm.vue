@@ -6,11 +6,13 @@ We have a simplified form of autocomplete to fill data based on previous version
 I had planned to just have a v-for loop over the input elements, but vue does not like to set the type of
 inputs dynamically, so everything is just laid out literally below.
 -->
+
+
 <form autocomplete="off" @submit.prevent="onSubmit">
-  <label class="date">
-    <span>{{showCells[0].label}}</span><br>
-    <input v-model="showCells[0].content" type="date" required/>
-  </label>  
+		<fieldset>
+	    <span>{{showCells[0].label}}</span>
+			<date-picker v-model="showCells[0].content" lang="en" input-class="date-input"></date-picker>
+		</fieldset>
     <label class="venue-name">
     <span>{{showCells[1].label}}</span><br>
     <input v-model="venueSearch" type="text" />
@@ -43,7 +45,7 @@ inputs dynamically, so everything is just laid out literally below.
   </label>  
     <label class="address">
     <span>{{showCells[6].label}}</span><br>
-    <textarea v-model="showCells[6].content" rows="5"/>
+    <textarea v-model="showCells[6].content" rows="6"/>
     <span class="address-details">{{addressDetails}}</span>
   </label>  
   <fieldset class="latlong">
@@ -66,12 +68,14 @@ inputs dynamically, so everything is just laid out literally below.
 </template>
 
 <script>
-import oldShows from "../assets/shows.json";
-import StandardButton from "./StandardButton";
+import oldShows from "../assets/shows.json"
+import StandardButton from "./StandardButton"
+import DatePicker from 'vue2-datepicker'
 
 export default {
 	data() {
 		return {
+			date: null,
 			oldShows: oldShows,
 			showCells: [
 				{type: "date", content: "", label: "Date"},
@@ -109,7 +113,7 @@ export default {
 		},
 		onSubmit() {
 			this.$emit("submit", this.showCells)
-			//this.resetVenueList() -- need to do this only AFTER we have confirmed everything is A-OK.
+			this.resetVenueList()
 		},
 		resetVenueList() {
 			this.showVenueList = true
@@ -163,7 +167,8 @@ export default {
 		}
 	},
 	components: {
-		StandardButton
+		StandardButton,
+		DatePicker
 	}
 };
 </script>
@@ -177,6 +182,7 @@ form {
 
 fieldset {
 	border: 0;
+	padding: 0;
 }
 
 
@@ -185,13 +191,11 @@ fieldset {
 }
 
 input,
-textarea {
+textarea,
+.date-input {
 	padding: 10px;
 	font-size: 0.9em;
 	width: 90%;
-}
-input[type="date"] {
-	font-size: 1.1em;
 }
 
 label {
@@ -248,4 +252,5 @@ h3 {
 	background-color: rgba(255, 255, 255, 0.5);
 	padding: 2px;
 }
+
 </style>

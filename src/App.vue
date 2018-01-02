@@ -20,4 +20,11 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+.date-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  color: #000;
+  border: 1px solid #575757;
+}
 </style>
