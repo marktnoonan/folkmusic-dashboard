@@ -4,7 +4,6 @@
 Longest Item:
   <span v-if="longestItem">{{longestItem.text}}</span>
 </div>
-
 <div class="ticker-item-location">
   <!--
     The class object here is kind of fun. 'active-ticker-item' is easy to determine, as is 'leaving-ticker-item',
@@ -13,7 +12,7 @@ Longest Item:
 <div v-for="(item, i) in tickerItems" :key="item.key" 
   :class="{'ticker-item': true, 
   'active-ticker-item': displayingNow == i, 
-  'leaving-ticker-item': (displayingNow == i + 1) || (displayingNow == 0 && i == tickerItems.length - 1)}" 
+  'leaving-ticker-item': (displayingNow == i + 1) || (displayingNow == 0 && i == tickerItems.length - 1 && firstCycleCompleted)}" 
   :ref="'ticker' + i">{{item.text}}</div>
 </div>
 
@@ -27,7 +26,8 @@ export default {
 	data() {
 		return {
 			tickerItems: [],
-			displayingNow: 0
+      displayingNow: 0,
+      firstCycleCompleted: false
 		};
 	},
 	mounted() {
@@ -41,6 +41,7 @@ export default {
 			if (instance.displayingNow < instance.tickerItems.length - 1) {
 				instance.displayingNow++;
 			} else {
+        firstCycleCompleted = true
 				instance.displayingNow = 0;
 			}
 		}, 3500);
