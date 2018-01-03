@@ -41,7 +41,11 @@ export default {
 			if (instance.displayingNow < instance.tickerItems.length - 1) {
 				instance.displayingNow++;
 			} else {
+<<<<<<< HEAD
         instance.firstCycleCompleted = true
+=======
+        firstCycleCompleted = true
+>>>>>>> 7949195b50e140695622726d4fd17bce7c6305a3
 				instance.displayingNow = 0;
 			}
 		}, 3500);
