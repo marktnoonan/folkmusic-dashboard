@@ -1,98 +1,117 @@
 <template>
-  <div>
-All items:
-{{tickerItems}}
-<br><br>
-
 <div class="ticker-wrapper">
 <div class="ticker-size-guide">
 Longest Item:
   <span v-if="longestItem">{{longestItem.text}}</span>
 </div>
+
 <div class="ticker-item-location">
-Current Item: <span v-if="tickerItems[0]">{{tickerItems[displayingNow].text}}</span>
-</div>
+  <!--
+    The class object here is kind of fun. 'active-ticker-item' is easy to determine, as is 'leaving-ticker-item',
+    except when the 
+  -->
+<div v-for="(item, i) in tickerItems" :key="item.key" 
+  :class="{'ticker-item': true, 
+  'active-ticker-item': displayingNow == i, 
+  'leaving-ticker-item': (displayingNow == i + 1) || (displayingNow == 0 && i == tickerItems.length - 1)}" 
+  :ref="'ticker' + i">{{item.text}}</div>
 </div>
 
-
-  </div>
+</div>
 </template>
 
 <script>
-  import firebase from "firebase";
+import firebase from "firebase";
 
-
-  export default {
-    data() {
-      return {
-        tickerItems: [],
-        displayingNow: 0
-
-      }
-    },
-    mounted() {
-    const tickerRef = firebase.database().ref("news-ticker-items");
-    this.tickerRef = tickerRef;
+export default {
+	data() {
+		return {
+			tickerItems: [],
+			displayingNow: 0
+		};
+	},
+	mounted() {
+		const tickerRef = firebase.database().ref("news-ticker-items");
+		this.tickerRef = tickerRef;
 		let instance = this;
 		tickerRef.once("value").then(function(snap) {
 			instance.tickerItems = snap.val();
 		});
-    },
-    computed: {
-      longestItem(){ 
-        let tempItems = [...this.tickerItems]
-        return tempItems.sort(function (a, b) { 
-          return b.text.length - a.text.length; })[0]
-      }
-    }
-  
-  }
-
-//   (function(){
-//   var tickerItemLocation = document.querySelector('.ticker-item-location');
-//   var tickerItems = ["89¢ Downloads Now Available in Store!", "Ludlow Massacre 100th Anniversary: new video in Media area", "NEW ALBUM \"GHOST LIGHT\" available for pre-order in Store","John's new book, \"Flowers for Sarajevo\" available now in the store","2018 SONGWRITING CAMP REGISTRATION NOW OPEN IN CAMP SECTION", "NEW POST-CHARLOTTESVILLE SONG, \"THE MACHINE,\" FREE DOWNLOAD IN STORE"]
-//   var displayingNow = 0;
-//   var tickerContent = "";
-//   var numberOfItems = tickerItems.length;
-//   var tickerSizeGuide = document.querySelector('.ticker-size-guide');
-//   var longestItem = tickerItems.sort(function (a, b) { return b.length - a.length; })[0];
-
-//   function populateTicker(){
-//     for (var i = 0; i < numberOfItems; i++){
-//       tickerContent +=  '<div class="ticker-item" id="ticker' + i + '">' +
-//                         tickerItems[i] + '</div>';
-//     }
-//     tickerItemLocation.innerHTML = tickerContent;
-//     document.querySelector('#ticker0').classList.add('active-ticker-item');
-//     tickerSizeGuide.innerHTML="<div>" + longestItem + "</div>";
-//   }
-
-// function displayTickerItem(){
-//   var previouslyActive = document.querySelector('.active-ticker-item') || false;
-//    if (previouslyActive){
-//     previouslyActive.classList.add('leaving-ticker-item');
-//   }
-
-//   setTimeout(function() {
-//     document.querySelector('#ticker' + displayingNow).classList.add('active-ticker-item');
-//     previouslyActive.classList.remove('active-ticker-item', 'leaving-ticker-item');
-//   }, 500);
-
-
-//   if (displayingNow === numberOfItems - 1){
-//     displayingNow = 0;
-//   }else {
-//     displayingNow++;
-//   }
-// }
-
-// populateTicker();
-// setInterval(displayTickerItem, 4000);
-//   })();
-
+		setInterval(function() {
+			if (instance.displayingNow < instance.tickerItems.length - 1) {
+				instance.displayingNow++;
+			} else {
+				instance.displayingNow = 0;
+			}
+		}, 3500);
+	},
+	methods: {
+		setActiveClass(i) {
+			this.$refs["ticker" + i].classList;
+		}
+	},
+	computed: {
+		longestItem() {
+			let tempItems = [...this.tickerItems];
+			return tempItems.sort(function(a, b) {
+				return b.text.length - a.text.length;
+			})[0];
+		}
+	}
+};
 </script>
 
 <style scoped>
+.ticker-wrapper {
+	border-top: 1px solid #aaa;
+	border-radius: 10px;
+	background: linear-gradient(
+		to bottom,
+		rgba(0, 0, 0, 0.12) 0%,
+		rgba(0, 0, 0, 0.03) 80%
+	);
+	position: relative;
+	padding: 10px;
+	padding-right: 0;
+	padding-left: 0;
+	text-align: center;
+	overflow: hidden;
+	margin: 0 auto;
+	max-width: 750px;
+}
+
+.ticker-item {
+	box-sizing: border-box;
+	display: block;
+	font-weight: bold;
+	position: absolute;
+	text-align: center;
+	padding: 6px;
+	width: 100%;
+	opacity: 0;
+	top: 6px;
+}
+
+.ticker-size-guide {
+	visibility: hidden;
+	padding: 6px;
+	font-weight: bold;
+	pointer-events: none;
+}
+
+.active-ticker-item {
+	opacity: 1;
+	-webkit-animation: slide-in-bottom 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+		both;
+	animation: slide-in-bottom 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+.leaving-ticker-item {
+	-webkit-animation: slide-out-top 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53)
+		both;
+	animation: slide-out-top 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+}
+
 /* ----------------------------------------------
  * Generated by Animista on 2017-6-12 18:7:49
  * w: http://animista.net, t: @cssanimista
@@ -104,28 +123,28 @@ Current Item: <span v-if="tickerItems[0]">{{tickerItems[displayingNow].text}}</s
  * ----------------------------------------
  */
 @-webkit-keyframes slide-out-top {
-  0% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-    opacity: 1;
-  }
-  100% {
-    -webkit-transform: translateY(-500px);
-    transform: translateY(-500px);
-    opacity: 0;
-  }
+	0% {
+		-webkit-transform: translateY(0);
+		transform: translateY(0);
+		opacity: 1;
+	}
+	100% {
+		-webkit-transform: translateY(-500px);
+		transform: translateY(-500px);
+		opacity: 0;
+	}
 }
 @keyframes slide-out-top {
-  0% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-    opacity: 1;
-  }
-  100% {
-    -webkit-transform: translateY(-500px);
-    transform: translateY(-500px);
-    opacity: 0;
-  }
+	0% {
+		-webkit-transform: translateY(0);
+		transform: translateY(0);
+		opacity: 1;
+	}
+	100% {
+		-webkit-transform: translateY(-500px);
+		transform: translateY(-500px);
+		opacity: 0;
+	}
 }
 
 /**
@@ -135,27 +154,27 @@ Current Item: <span v-if="tickerItems[0]">{{tickerItems[displayingNow].text}}</s
  */
 
 @-webkit-keyframes slide-in-bottom {
-  0% {
-    -webkit-transform: translateY(100px);
-    transform: translateY(100px);
-    opacity: 0;
-  }
-  100% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-    opacity: 1;
-  }
+	0% {
+		-webkit-transform: translateY(100px);
+		transform: translateY(100px);
+		opacity: 0;
+	}
+	100% {
+		-webkit-transform: translateY(0);
+		transform: translateY(0);
+		opacity: 1;
+	}
 }
 @keyframes slide-in-bottom {
-  0% {
-    -webkit-transform: translateY(100px);
-    transform: translateY(100px);
-    opacity: 0;
-  }
-  100% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-    opacity: 1;
-  }
+	0% {
+		-webkit-transform: translateY(100px);
+		transform: translateY(100px);
+		opacity: 0;
+	}
+	100% {
+		-webkit-transform: translateY(0);
+		transform: translateY(0);
+		opacity: 1;
+	}
 }
 </style>
