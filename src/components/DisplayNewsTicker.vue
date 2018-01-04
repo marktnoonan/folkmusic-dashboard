@@ -1,7 +1,6 @@
 <template>
 <div class="ticker-wrapper">
 <div class="ticker-size-guide">
-Longest Item:
   <span v-if="longestItem">{{longestItem.text}}</span>
 </div>
 <div class="ticker-item-location">
@@ -45,11 +44,6 @@ export default {
 				instance.displayingNow = 0;
 			}
 		}, 3500);
-	},
-	methods: {
-		setActiveClass(i) {
-			this.$refs["ticker" + i].classList;
-		}
 	},
 	computed: {
 		longestItem() {

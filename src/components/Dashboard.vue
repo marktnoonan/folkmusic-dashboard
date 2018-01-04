@@ -3,7 +3,7 @@
       <ul class="menu">
       <li><router-link to="/dashboard/add-show"> Add A Show</router-link></li>
       <li><router-link to="/dashboard/news-ticker"> Edit News Ticker</router-link></li>
-      <li><router-link to="/dashboard/display-news-ticker"> View News Ticker</router-link></li>
+      <li><router-link to="/dashboard/display-news-ticker"> Preview News Ticker</router-link></li>
       <li><standard-button :onClick="logout">Log Out</standard-button></li>
     </ul>
     <router-view />
@@ -64,6 +64,8 @@ li {
 }
 a {
 	color: rgb(21, 95, 105);
+  text-decoration: none;
+  font-weight: bold;
 }
 
 </style>
