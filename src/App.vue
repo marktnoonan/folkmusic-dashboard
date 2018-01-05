@@ -7,13 +7,8 @@
 
 <script>
 export default {
-  name: 'app',
-  methods: {
-    replaceRoute(route){
-      this.$router.replace(route)  
-    }
+  name: 'app'
   }
-}
 </script>
 
 <style>

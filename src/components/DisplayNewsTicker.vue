@@ -19,41 +19,41 @@
 </template>
 
 <script>
-import firebase from "firebase";
+import firebase from "firebase"
 
 export default {
 	data() {
 		return {
 			tickerItems: [],
-      displayingNow: 0,
-      firstCycleCompleted: false
-		};
+			displayingNow: 0,
+			firstCycleCompleted: false
+		}
 	},
 	mounted() {
-		const tickerRef = firebase.database().ref("news-ticker-items");
-		this.tickerRef = tickerRef;
-		let instance = this;
+		const tickerRef = firebase.database().ref("news-ticker-items")
+		this.tickerRef = tickerRef
+		let instance = this
 		tickerRef.once("value").then(function(snap) {
-			instance.tickerItems = snap.val();
-		});
+			instance.tickerItems = snap.val()
+		})
 		setInterval(function() {
 			if (instance.displayingNow < instance.tickerItems.length - 1) {
-				instance.displayingNow++;
+				instance.displayingNow++
 			} else {
-        instance.firstCycleCompleted = true
-				instance.displayingNow = 0;
+				instance.firstCycleCompleted = true
+				instance.displayingNow = 0
 			}
-		}, 3500);
+		}, 3500)
 	},
 	computed: {
 		longestItem() {
-			let tempItems = [...this.tickerItems];
+			let tempItems = [...this.tickerItems]
 			return tempItems.sort(function(a, b) {
-				return b.text.length - a.text.length;
-			})[0];
+				return b.text.length - a.text.length
+			})[0]
 		}
 	}
-};
+}
 </script>
 
 <style scoped>

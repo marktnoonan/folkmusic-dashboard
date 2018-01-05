@@ -18,46 +18,46 @@
 </template>
 
 <script>
-import StandardButton from './StandardButton'
-import firebase from "firebase";
+import StandardButton from "./StandardButton"
+import firebase from "firebase"
 
 export default {
 	data() {
 		return {
-      tickerItems: [],
-      tickerRef: null
-		};
-  },
-  methods: {
-    updateFirebase(){
-      this.tickerRef.set(this.tickerItems)
-    },
-    createTickerItem(){
-      this.tickerItems.push({"key": Date.now(), "text":""});
-    },
-    removeItem(index){
-      console.log("remove item " + index);
-      this.tickerItems.splice(index,1)
-    },
-    undoChanges() {
-      let instance = this
-      this.tickerRef.once("value").then(function(snap) {
-			instance.tickerItems = snap.val();
-		});
-    }
-  },
-  components:{
-    StandardButton
-  },
+			tickerItems: [],
+			tickerRef: null
+		}
+	},
+	methods: {
+		updateFirebase() {
+			this.tickerRef.set(this.tickerItems)
+		},
+		createTickerItem() {
+			this.tickerItems.push({key: Date.now(), text: ""})
+		},
+		removeItem(index) {
+			console.log("remove item " + index)
+			this.tickerItems.splice(index, 1)
+		},
+		undoChanges() {
+			let instance = this
+			this.tickerRef.once("value").then(function(snap) {
+				instance.tickerItems = snap.val()
+			})
+		}
+	},
+	components: {
+		StandardButton
+	},
 	mounted() {
-    const tickerRef = firebase.database().ref("news-ticker-items");
-    this.tickerRef = tickerRef;
-		let instance = this;
+		const tickerRef = firebase.database().ref("news-ticker-items")
+		this.tickerRef = tickerRef
+		let instance = this
 		tickerRef.once("value").then(function(snap) {
-			instance.tickerItems = snap.val();
-		});
+			instance.tickerItems = snap.val()
+		})
 	}
-};
+}
 </script>
 
 <style scoped>
@@ -66,12 +66,12 @@ textarea {
 	font-size: 0.9em;
 	width: 400px;
 	margin: 10px;
-  resize: none;
+	resize: none;
 }
 .item-deleter {
-  position: absolute;
-  color: red;
-  cursor: pointer;
-  transform: translate(-5px, 6px);
+	position: absolute;
+	color: red;
+	cursor: pointer;
+	transform: translate(-5px, 6px);
 }
 </style>
