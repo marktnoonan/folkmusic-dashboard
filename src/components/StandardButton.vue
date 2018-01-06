@@ -30,7 +30,8 @@ button {
   font-size: 14px;
   border: 0;
   border-radius: 4px;
-  background-color: powderblue
+  background-color: powderblue;
+  border: 1px solid rgba(0, 0, 0, 0.4)
 }
 button:hover {
   background-color: lightgrey

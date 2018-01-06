@@ -1,9 +1,10 @@
 <template>
   <div class="dash">
       <ul class="menu">
-      <li><router-link to="/dashboard/add-show"> Add A Show</router-link></li>
-      <li><router-link to="/dashboard/news-ticker"> Edit News Ticker</router-link></li>
-      <li><router-link to="/dashboard/display-news-ticker"> Preview News Ticker</router-link></li>
+      <li><router-link to="/dashboard/add-show">Add A Show</router-link></li>
+      <li><router-link to="/dashboard/venues">Stored Venues</router-link></li>
+      <li><router-link to="/dashboard/news-ticker">Edit News Ticker</router-link></li>
+      <li><router-link to="/dashboard/display-news-ticker">Preview News Ticker</router-link></li>
       <li><standard-button :onClick="logout">Log Out</standard-button></li>
     </ul>
     <router-view />
@@ -56,7 +57,6 @@ ul {
 	list-style-type: none;
 	padding: 0;
   padding-top: 10px;
-  background-color: aliceblue;
 }
 li {
 	display: inline-block;

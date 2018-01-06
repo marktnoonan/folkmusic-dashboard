@@ -30,4 +30,9 @@ export default {
 .main-title {
   margin-bottom: 0;
 }
+
+* {
+  box-sizing: border-box
+}
+
 </style>

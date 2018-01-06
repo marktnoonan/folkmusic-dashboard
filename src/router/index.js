@@ -7,6 +7,8 @@ import Login from '@/components/Login'
 import AddShowForm from '@/components/AddShowForm'
 import NewsTicker from '@/components/NewsTicker'
 import DisplayNewsTicker from '@/components/DisplayNewsTicker'
+import Venues from '@/components/Venues'
+
 import firebase from 'firebase'
 
 Vue.use(VueResource)
@@ -36,7 +38,13 @@ let router = new Router({
           path: "display-news-ticker",
           name: "Display News Ticker",
           component: DisplayNewsTicker
+        },
+        {
+          path: "venues",
+          name: "Venues",
+          component: Venues
         }
+
       ]
     },
     {

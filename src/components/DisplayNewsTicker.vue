@@ -6,13 +6,17 @@
 <div class="ticker-item-location">
   <!--
     The class object here is kind of fun. 'active-ticker-item' is easy to determine, as is 'leaving-ticker-item',
-    except when the 
+    except when the loop starts, so we have a flag for the first cycle completing, and then everything looks right.
   -->
-<div v-for="(item, i) in tickerItems" :key="item.key" 
+	<div 
+	v-for="(item, i) in tickerItems" 
+	:key="item.key" 
   :class="{'ticker-item': true, 
   'active-ticker-item': displayingNow == i, 
   'leaving-ticker-item': (displayingNow == i + 1) || (displayingNow == 0 && i == tickerItems.length - 1 && firstCycleCompleted)}" 
-  :ref="'ticker' + i">{{item.text}}</div>
+  :ref="'ticker' + i">
+	{{item.text}}
+	</div>
 </div>
 
 </div>

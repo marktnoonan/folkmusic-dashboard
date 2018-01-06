@@ -68,9 +68,9 @@ inputs dynamically, so everything is just laid out literally below.
 </template>
 
 <script>
-import firebase from "firebase"
-import oldShows from "../assets/shows.json"
-import StandardButton from "./StandardButton"
+import firebase from 'firebase'
+import oldShows from '../assets/shows.json'
+import StandardButton from './StandardButton'
 import DatePicker from 'vue2-datepicker'
 
 export default {
@@ -79,33 +79,33 @@ export default {
 			date: null,
 			oldShows: oldShows,
 			showCells: [
-				{type: "date", content: "", label: "Date"},
-				{type: "text", content: "", label: "Venue"},
-				{type: "text", content: "", label: "Description"},
-				{type: "tel", content: "", label: "Phone Number"},
-				{type: "url", content: "", label: "Website"},
-				{type: "text", content: "", label: "Display City"},
-				{type: "text", content: "", label: "Full Address"},
-				{type: "number", content: "", label: "Latitude"},
-				{type: "number", content: "", label: "Longitude"}
+				{type: 'date', content: '', label: 'Date'},
+				{type: 'text', content: '', label: 'Venue'},
+				{type: 'text', content: '', label: 'Description'},
+				{type: 'tel', content: '', label: 'Phone Number'},
+				{type: 'url', content: '', label: 'Website'},
+				{type: 'text', content: '', label: 'Display City'},
+				{type: 'text', content: '', label: 'Full Address'},
+				{type: 'number', content: '', label: 'Latitude'},
+				{type: 'number', content: '', label: 'Longitude'}
 			],
-			venueSearch: "",
-			addressDetails: "",
+			venueSearch: '',
+			addressDetails: '',
 			showVenueList: true,
-			messageAfterSubmit: ""
-		};
+			messageAfterSubmit: ''
+		}
 	},
 	props: {},
 	methods: {
 		populateVenueDetails(show) {
-			this.venueSearch = show.Venue;
+			this.venueSearch = show.Venue
 			// adjusting for labels clearer in the UI than they are in the Google Sheet
 			this.showCells.forEach(cell => {
-				if (cell.label !== "Date" && cell.label !== "Website") {
-					if (cell.label === "Display City") {
-						cell.content = show["City"]
-					} else if (cell.label === "Full Address") {
-						cell.content = show["Address"]
+				if (cell.label !== 'Date' && cell.label !== 'Website') {
+					if (cell.label === 'Display City') {
+						cell.content = show['City']
+					} else if (cell.label === 'Full Address') {
+						cell.content = show['Address']
 					} else {
 						cell.content = show[cell.label]
 					}
@@ -115,78 +115,82 @@ export default {
 		},
 		onSubmit() {
 			let showCells = this.showCells
-			if (showCells[7].content !== "" && showCells[8].content !== "") {
-				this.safeToAddShow = true;
+			if (showCells[7].content !== '' && showCells[8].content !== '') {
+				this.safeToAddShow = true
 			}
 			if (this.safeToAddShow) {
 				let rowContent = showCells.map(cell => {
-					return cell.content;
-        });
-        // format the date for saving as an YYYY-MM-DD string
-        let date = new Date(rowContent[0])
-        rowContent[0] = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+					return cell.content
+				})
+				// format the date for saving as an YYYY-MM-DD string
+				let date = new Date(rowContent[0])
+				rowContent[0] =
+					date.getFullYear() +
+					'-' +
+					(date.getMonth() + 1) +
+					'-' +
+					date.getDate()
 
-				const showRef = firebase.database().ref("showsToAdd");
-				const archiveRef = firebase.database().ref("formSubmissions");
+				const showRef = firebase.database().ref('showsToAdd')
+				const archiveRef = firebase.database().ref('formSubmissions')
 
 				let instance = this
-        showRef.push(rowContent, function(error) {
+				showRef.push(rowContent, function(error) {
 					if (error) {
-            alert("There was an error saving this show.");
-            // if there is an error we need to keep this showCells object and retry.
-            // unless firebase does that automatically.
+						alert('There was an error saving this show.')
+						// if there is an error we need to keep this showCells object and retry.
+						// unless firebase does that automatically.
 					} else {
-						instance.messageAfterSubmit = "Show saved!"
+						instance.messageAfterSubmit = 'Show saved!'
 					}
-				});
-        
-        archiveRef.push(rowContent);
+				})
+
+				archiveRef.push(rowContent)
 			} else {
-				alert("Please check the address");
+				alert('Please check the address')
 			}
-		this.resetVenueList()
+			this.resetVenueList()
 		},
 		resetVenueList() {
 			this.showVenueList = true
-			this.venueSearch = ""
-			this.showCells.forEach(cell => (cell.content = ""))
+			this.venueSearch = ''
+			this.showCells.forEach(cell => (cell.content = ''))
 		},
 		geocode: function() {
 			this.$http
 				.get(
-					"https://api.opencagedata.com/geocode/v1/json?q=" +
+					'https://api.opencagedata.com/geocode/v1/json?q=' +
 						encodeURIComponent(this.showCells[6].content) +
-						"&pretty=1&no_annotations=1&key=2b9e7715faf44bf2bb2f60bbae2768ba"
+						'&pretty=1&no_annotations=1&key=2b9e7715faf44bf2bb2f60bbae2768ba'
 				)
 				.then(
 					response => {
 						try {
-							let location = response.body.results[0];
+							let location = response.body.results[0]
 							this.addressDetails = `Address found in 
                                 ${location.components.state}, 
-                                ${location.components.country}`;
-							this.showCells[7].content = location.geometry.lat;
-							this.showCells[8].content = location.geometry.lng;
+                                ${location.components.country}`
+							this.showCells[7].content = location.geometry.lat
+							this.showCells[8].content = location.geometry.lng
 						} catch (error) {
-							if (this.showCells[6].content !== "") {
+							if (this.showCells[6].content !== '') {
 								this.addressDetails = `No location found for "${this
-									.showCells[6].content}"`;
+									.showCells[6].content}"`
 							} else {
 								// not sure this is necessarily true. Could that field be empty for some other reason ever?
-								this.addressDetails = "No address entered.";
+								this.addressDetails = 'No address entered.'
 							}
 							// in case we had already set them:
-							this.showCells[7].content = "";
-							this.showCells[8].content = "";
+							this.showCells[7].content = ''
+							this.showCells[8].content = ''
 						}
 					},
 					response => {
-						console.log(response);
+						console.log(response)
 					}
-				);
+				)
 		},
-				submitShow: function(showCells) {
-		}
+		submitShow: function(showCells) {}
 	},
 	computed: {
 		possibleVenues() {
@@ -194,16 +198,16 @@ export default {
 				if (this.venueSearch.length > 1) {
 					return show.Venue
 						.toLowerCase()
-						.includes(this.venueSearch.toLowerCase());
+						.includes(this.venueSearch.toLowerCase())
 				}
-			});
+			})
 		}
 	},
 	components: {
 		StandardButton,
 		DatePicker
 	}
-};
+}
 </script>
 
 <style scoped>
@@ -218,9 +222,8 @@ fieldset {
 	padding: 0;
 }
 
-
 .geocode {
-	margin-top: 10px
+	margin-top: 10px;
 }
 
 input,
@@ -285,5 +288,4 @@ h3 {
 	background-color: rgba(255, 255, 255, 0.5);
 	padding: 2px;
 }
-
 </style>
