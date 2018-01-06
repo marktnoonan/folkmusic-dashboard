@@ -2,15 +2,17 @@
   <div class="venue-container">
     <div v-for="(venue, index) in venues" :key="venue.Venue" class="venue-listing" :id="index">
       <h3>{{venue.Venue}}, {{venue.City}}
-      <standard-button :onClick="edit.bind(this, venue.Venue, index)">Edit</standard-button>
-
+      <standard-button 
+        class="edit"
+        v-if="currentlyEditing !== venue.Venue"
+        :onClick="edit.bind(this, venue.Venue, index)">Edit</standard-button>
       </h3>
       <form 
         v-if="currentlyEditing === venue.Venue"
         @submit.prevent>
         <label>
           Venue Name
-          <input type="text" v-model="venue.Venue"/>
+          <input type="text" v-model="venue.Venue" disabled/>
         </label>
         <label>
           Concert Description
@@ -62,6 +64,8 @@ export default {
   methods: {
     editing(venueName) {
       return this.currentlyEditing === venueName
+      // FIXME: problem when editing the venue name itself ... it immediately closes the editor because obviously, the name is different now.
+      // Doh.
     },
     edit(venueName, id){
       this.currentlyEditing = venueName
@@ -103,6 +107,11 @@ button {
 }
 .cancel {
 	background-color: rgb(225, 134, 134);
+}
+.edit {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }
 
 </style>

@@ -23,7 +23,7 @@ inputs dynamically, so everything is just laid out literally below.
           :key="index" 
           @click="populateVenueDetails(show)"
           class="venue"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-repeat"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
-{{show.Venue}} 
+ {{show.Venue}}
         </li>
       </ul>
     </label>
@@ -72,6 +72,9 @@ import firebase from 'firebase'
 import oldShows from '../assets/shows.json'
 import StandardButton from './StandardButton'
 import DatePicker from 'vue2-datepicker'
+import matchSorter, {rankings, caseRankings} from 'match-sorter'
+
+window.matchSorter = matchSorter
 
 export default {
 	data() {
@@ -193,14 +196,23 @@ export default {
 		submitShow: function(showCells) {}
 	},
 	computed: {
+		allVenueNames() {
+			const names = []
+			this.oldShows.forEach((show => names.push(show.Venue)))
+			return names
+		},
 		possibleVenues() {
-			return this.oldShows.filter(show => {
-				if (this.venueSearch.length > 1) {
-					return show.Venue
-						.toLowerCase()
-						.includes(this.venueSearch.toLowerCase())
-				}
-			})
+			if (this.venueSearch.length){
+			return matchSorter(this.oldShows, this.venueSearch, {keys: [(show) => show.Venue]})
+			}
+
+			// return this.oldShows.filter(show => {
+			// 	if (this.venueSearch.length > 1) {
+			// 		return show.Venue
+			// 			.toLowerCase()
+			// 			.includes(this.venueSearch.toLowerCase())
+			// 	}
+			// })
 		}
 	},
 	components: {

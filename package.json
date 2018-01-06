@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "firebase": "^4.8.0",
+    "match-sorter": "^2.2.0",
     "vue": "^2.5.2",
     "vue2-datepicker": "^1.8.0"
   },
