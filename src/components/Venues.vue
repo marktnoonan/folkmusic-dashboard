@@ -14,6 +14,7 @@
         :disabled="currentlyEditing === venue.Venue"
         :onClick="edit.bind(this, venue.Venue, index)">Edit</small-button>
       </h3>
+      <transition name="fade">
       <form 
         v-if="currentlyEditing === venue.Venue"
         @submit.prevent>
@@ -49,6 +50,7 @@
           Cancel
         </standard-button>
       </form>
+      </transition>
     </div>
     
   </div>
@@ -99,8 +101,8 @@ export default {
   display: block;
   margin: 8px;
   padding: 4px 6px;
-  background-color: rgb(217, 217, 217);
-  border-radius: 4px;
+  /* background-color: rgb(217, 217, 217);
+  border-radius: 4px; */
 }
 
 label, input, textarea {
@@ -121,11 +123,24 @@ button {
 	background-color: rgb(225, 134, 134);
 }
 
-
 .currently-editing {
   padding-top: 10px;
   padding-bottom: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.4)
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  background-color: rgb(217, 217, 217);
+
+}
+
+.fade-enter-active {
+  transition: opacity .6s;
+}
+
+.fade-leave-active {
+  transition: all 0
+}
+
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 
 </style>
