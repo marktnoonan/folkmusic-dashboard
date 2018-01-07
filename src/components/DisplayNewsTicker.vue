@@ -37,7 +37,7 @@ export default {
 		const tickerRef = firebase.database().ref("news-ticker-items")
 		this.tickerRef = tickerRef
 		let instance = this
-		tickerRef.once("value").then(function(snap) {
+		tickerRef.on("value", function(snap) {
 			instance.tickerItems = snap.val()
 		})
 		setInterval(function() {
@@ -61,8 +61,11 @@ export default {
 </script>
 
 <style scoped>
+
 .ticker-wrapper {
+	resize: horizontal;
 	border-top: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;	
 	border-radius: 10px;
 	background: linear-gradient(
 		to bottom,
@@ -70,13 +73,12 @@ export default {
 		rgba(0, 0, 0, 0.03) 80%
 	);
 	position: relative;
-	padding: 10px;
-	padding-right: 0;
-	padding-left: 0;
+	padding-top: 10px;
 	text-align: center;
 	overflow: hidden;
 	margin: 0 auto;
 	max-width: 750px;
+	z-index: 1000;
 }
 
 .ticker-item {
@@ -89,6 +91,7 @@ export default {
 	width: 100%;
 	opacity: 0;
 	top: 6px;
+	pointer-events: none
 }
 
 .ticker-size-guide {

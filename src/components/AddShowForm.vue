@@ -149,7 +149,7 @@ export default {
 					'-' +
 					date.getDate()
 
-				const showRef = firebase.database().ref('showsToAdd')
+				const showRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/showsToAdd')
 				const archiveRef = firebase.database().ref('formSubmissions')
 
 				let instance = this

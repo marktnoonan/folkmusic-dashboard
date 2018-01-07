@@ -7,8 +7,9 @@
       <li><router-link to="/dashboard/display-news-ticker">Preview News Ticker</router-link></li>
       <li><standard-button :onClick="logout">Log Out</standard-button></li>
     </ul>
-    <router-view />
-
+		<transition name="fade">
+    	<router-view />
+		</transition>
 <br><br>
 
   </div>
@@ -66,6 +67,16 @@ a {
 	color: rgb(21, 95, 105);
   text-decoration: none;
   font-weight: bold;
+}
+.fade-enter-active {
+  transition: opacity .3s;
+}
+.fade-leave-active {
+  transition: all 0
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 
 </style>

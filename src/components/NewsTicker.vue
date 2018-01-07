@@ -1,24 +1,28 @@
 <template>
-  <div>
+<div>
+	<display-news-ticker />
 <h4>News Ticker Items</h4>
 <div v-for="(item, index) in tickerItems" :key="item.key">
   <textarea v-model="item.text" cols="50" rows="2"> </textarea>
   <span class="item-deleter" @click="removeItem(index)">x</span>
 </div>
 <standard-button :onClick="createTickerItem">Add a new item</standard-button>
-<standard-button :onClick="updateFirebase">Save Changes</standard-button>
-<standard-button :onClick="undoChanges">Undo All Changes</standard-button>
-
+<standard-button :onClick="undoChanges" class="reset">Undo Unsaved Changes</standard-button>
+<standard-button :onClick="updateFirebase" class="submit">Save Changes</standard-button>
 <!-- 
   TODO:
   Need a way to track what has been edited and give it a different style/color/something so that when I click "save changes", those things can lock in.
- -->
+  -->
 
-  </div>
+</div>
+
+
 </template>
 
 <script>
 import StandardButton from "./StandardButton"
+import DisplayNewsTicker from "./DisplayNewsTicker"
+
 import firebase from "firebase"
 
 export default {
@@ -47,7 +51,8 @@ export default {
 		}
 	},
 	components: {
-		StandardButton
+		StandardButton,
+		DisplayNewsTicker
 	},
 	mounted() {
 		this.tickerRef = firebase.database().ref("news-ticker-items")
@@ -73,4 +78,13 @@ textarea {
 	cursor: pointer;
 	transform: translate(-5px, 6px);
 }
+
+.submit {
+  background-color: rgb(161, 191, 121);
+}
+
+.reset {
+	background-color: rgb(225, 134, 134);
+}
+
 </style>
