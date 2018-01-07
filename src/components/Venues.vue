@@ -9,10 +9,10 @@
       }" 
       :id="index">
       <h3>{{venue.Venue}}, {{venue.City}}
-      <standard-button 
+      <small-button 
         class="edit"
-        v-if="currentlyEditing !== venue.Venue"
-        :onClick="edit.bind(this, venue.Venue, index)">Edit</standard-button>
+        :disabled="currentlyEditing === venue.Venue"
+        :onClick="edit.bind(this, venue.Venue, index)">Edit</small-button>
       </h3>
       <form 
         v-if="currentlyEditing === venue.Venue"
@@ -57,10 +57,12 @@
 <script>
 import venues from '../assets/shows.json'
 import StandardButton from './StandardButton'
+import SmallButton from './SmallButton'
 
 export default {
   components: {
-    StandardButton
+    StandardButton,
+    SmallButton
   },
 	data() {
 		return {
@@ -118,11 +120,7 @@ button {
 .cancel {
 	background-color: rgb(225, 134, 134);
 }
-.edit {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-}
+
 
 .currently-editing {
   padding-top: 10px;

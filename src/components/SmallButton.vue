@@ -1,7 +1,7 @@
 <template>
     <button @click="onClick">
       <slot>
-        Button with no text content!
+        Small button with no text content!
       </slot>
     </button>
 </template>
@@ -24,8 +24,8 @@ export default {
 @import '../css/button-base-styles.css';
 
 button {
-  padding: 10px;
-  font-size: 14px;
+  padding: 3px;
+  font-size: 12px;
   }
 
 </style>
