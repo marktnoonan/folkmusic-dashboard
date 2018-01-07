@@ -50,10 +50,9 @@ export default {
 		StandardButton
 	},
 	mounted() {
-		const tickerRef = firebase.database().ref("news-ticker-items")
-		this.tickerRef = tickerRef
+		this.tickerRef = firebase.database().ref("news-ticker-items")
 		let instance = this
-		tickerRef.once("value").then(function(snap) {
+		this.tickerRef.once("value").then(function(snap) {
 			instance.tickerItems = snap.val()
 		})
 	}

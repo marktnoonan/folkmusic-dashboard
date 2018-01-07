@@ -205,14 +205,6 @@ export default {
 			if (this.venueSearch.length){
 			return matchSorter(this.oldShows, this.venueSearch, {keys: [(show) => show.Venue]})
 			}
-
-			// return this.oldShows.filter(show => {
-			// 	if (this.venueSearch.length > 1) {
-			// 		return show.Venue
-			// 			.toLowerCase()
-			// 			.includes(this.venueSearch.toLowerCase())
-			// 	}
-			// })
 		}
 	},
 	components: {

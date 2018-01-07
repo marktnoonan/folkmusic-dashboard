@@ -1,6 +1,13 @@
 <template>
   <div class="venue-container">
-    <div v-for="(venue, index) in venues" :key="venue.Venue" class="venue-listing" :id="index">
+    <div 
+      v-for="(venue, index) in venues" 
+      :key="venue.Venue" 
+      :class="{
+        'venue-listing': true,
+        'currently-editing': currentlyEditing === venue.Venue
+      }" 
+      :id="index">
       <h3>{{venue.Venue}}, {{venue.City}}
       <standard-button 
         class="edit"
@@ -69,7 +76,10 @@ export default {
     },
     edit(venueName, id){
       this.currentlyEditing = venueName
+      
+      // these just move us to the right place to see which thing we are editing
       window.location.hash = id
+      window.scrollBy(0, -30)
     },
     cancelEditing() {
       this.currentlyEditing = ''
@@ -112,6 +122,11 @@ button {
   background-color: transparent;
   border: none;
   cursor: pointer;
+}
+
+.currently-editing {
+  padding-top: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.4)
 }
 
 </style>
