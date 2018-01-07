@@ -15,15 +15,26 @@ inputs dynamically, so everything is just laid out literally below.
 		</fieldset>
     <label class="venue-name">
     <span>{{showCells[1].label}}</span><br>
-    <input v-model="venueSearch" type="text" />
+    <input 
+			v-model="venueSearch" 
+			type="text" 
+			@keyup.down="increaseSelection" 
+			@keyup.up="decreaseSelection"
+		  @keyup.enter.prevent="confirmSelection"
+		/>
     <ul id="venues">
         <li 
           v-for="(show, index) in possibleVenues"
           v-if="showVenueList" 
           :key="index" 
           @click="populateVenueDetails(show)"
-          class="venue"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-repeat"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
- {{show.Venue}}
+          :class="{
+					'venue': true,
+					'willBeSelected': willBeSelected === index
+					}"
+				>					
+					<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-repeat"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+			 		 {{show.Venue}}
         </li>
       </ul>
     </label>
@@ -93,6 +104,7 @@ export default {
 				{type: 'number', content: '', label: 'Longitude'}
 			],
 			venueSearch: '',
+			willBeSelected: 0,
 			addressDetails: '',
 			showVenueList: true,
 			messageAfterSubmit: ''
@@ -117,6 +129,9 @@ export default {
 			this.showVenueList = false
 		},
 		onSubmit() {
+			if (this.showCells[1].content === ""){
+				return;
+			}
 			let showCells = this.showCells
 			if (showCells[7].content !== '' && showCells[8].content !== '') {
 				this.safeToAddShow = true
@@ -157,6 +172,7 @@ export default {
 		resetVenueList() {
 			this.showVenueList = true
 			this.venueSearch = ''
+			this.willBeSelected = 0
 			this.showCells.forEach(cell => (cell.content = ''))
 		},
 		geocode: function() {
@@ -193,17 +209,36 @@ export default {
 					}
 				)
 		},
-		submitShow: function(showCells) {}
+		submitShow: function(showCells) {},
+		increaseSelection() {
+			if (this.venueSearch.length){
+				if (this.willBeSelected < this.possibleVenues.length - 1){
+						this.willBeSelected++
+				}
+			}			
+		},
+		decreaseSelection() {
+		if (this.venueSearch.length){
+				if (this.willBeSelected > 0){
+						this.willBeSelected--
+				}
+			}
+		},
+		confirmSelection(event) {
+			this.populateVenueDetails(this.possibleVenues[this.willBeSelected])
+		}
 	},
 	computed: {
-		allVenueNames() {
-			const names = []
-			this.oldShows.forEach((show => names.push(show.Venue)))
-			return names
-		},
 		possibleVenues() {
 			if (this.venueSearch.length){
-			return matchSorter(this.oldShows, this.venueSearch, {keys: [(show) => show.Venue]})
+			return matchSorter(
+				this.oldShows, 
+				this.venueSearch, 
+				{
+					keys: [(show) => show.Venue],
+					threshold: matchSorter.rankings.WORD_STARTS_WITH
+					}
+				)
 			}
 		}
 	},
@@ -283,7 +318,7 @@ li {
 	padding: 4px;
 }
 
-li:hover {
+.willBeSelected {
 	color: #fff;
 }
 

@@ -124,6 +124,7 @@ button {
 
 .currently-editing {
   padding-top: 10px;
+  padding-bottom: 10px;
   border: 1px solid rgba(0, 0, 0, 0.4)
 }
 
