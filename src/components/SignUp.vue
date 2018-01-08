@@ -1,10 +1,9 @@
 <template>
   <div class="login">
-    <h3>Sign In</h3>
+    <h3>Sign Up</h3>
     <input type="text" v-model="email" placeholder="Email"><br>
     <input type="password" v-model="password" placeholder="Password"><br>
-    <standard-button :onClick="login">Log In</standard-button>
-    <router-link to="/sign-up">Sign Up</router-link>
+    <standard-button :onClick="signUp">Sign Up</standard-button>
   </div>
 </template>
 
@@ -14,7 +13,7 @@
   import StandardButton from './StandardButton'
 
   export default {
-    name: "login",
+    name: "signUp",
     data: function () {
       return {
         email: '',
@@ -22,15 +21,14 @@
       }
     },
     methods: {
-      login: function () {
-        firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
-          (user) => {
-          this.$router.replace('dashboard')  
-          },
-          (err) => {
-            alert("oops " + err.message)
+      signUp(){
+        firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(
+          function(user) {
+            this.$router.replace('dashboard')  
+          }, function(err) {
+            alert("a screwup of some kind took place")
           }
-        )
+      )
       }
     },
     components: {

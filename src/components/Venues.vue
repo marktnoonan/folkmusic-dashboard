@@ -1,26 +1,26 @@
 <template>
-  <div class="venue-container">
+  <div class="venue-container" v-if="dataLoaded">
     <div 
-      v-for="(venue, index) in venues" 
-      :key="venue.Venue" 
+      v-for="(venue, index) in userVenues" 
+      :key="venue.venueID" 
       :class="{
         'venue-listing': true,
-        'currently-editing': currentlyEditing === venue.Venue
+        'currently-editing': currentlyEditing === venue.venueID
       }" 
       :id="index">
       <h3>{{venue.Venue}}, {{venue.City}}
       <small-button 
         class="edit"
-        :disabled="currentlyEditing === venue.Venue"
-        :onClick="edit.bind(this, venue.Venue, index)">Edit</small-button>
+        :disabled="currentlyEditing === venue.venueID"
+        :onClick="edit.bind(this, venue.venueID, index)">Edit</small-button>
       </h3>
       <transition name="fade">
       <form 
-        v-if="currentlyEditing === venue.Venue"
+        v-if="currentlyEditing === venue.venueID"
         @submit.prevent>
         <label>
           Venue Name
-          <input type="text" v-model="venue.Venue" disabled/>
+          <input type="text" v-model.lazy="venue.Venue" />
         </label>
         <label>
           Concert Description
@@ -43,11 +43,18 @@
           <input type="text" v-model="venue.Website" />      
         </label>
         <standard-button 
-          :onClick="cancelEditing.bind(this, venue.Venue)" 
+          :onClick="cancelEditing.bind(this, venue.venueID)" 
           @click.prevent
           class='cancel'
           >
           Cancel
+        </standard-button>
+        <standard-button 
+          :onClick="confirmEditing.bind(this, venue, index)" 
+          @click.prevent
+          class='submit'
+          >
+          Save
         </standard-button>
       </form>
       </transition>
@@ -57,9 +64,10 @@
 </template>
 
 <script>
-import venues from '../assets/shows.json'
 import StandardButton from './StandardButton'
 import SmallButton from './SmallButton'
+
+import firebase from 'firebase'
 
 export default {
   components: {
@@ -68,19 +76,57 @@ export default {
   },
 	data() {
 		return {
-      venues: venues,
-      currentlyEditing: ""
+      currentlyEditing: "",
+      userVenues: [],
+      dataLoaded: false,
 		}
   },
-  methods: {
-    editing(venueName) {
-      return this.currentlyEditing === venueName
-      // FIXME: problem when editing the venue name itself ... it immediately closes the editor because obviously, the name is different now.
-      // Doh.
-    },
-    edit(venueName, id){
-      this.currentlyEditing = venueName
+  mounted() {
+    console.log(this.dataLoaded);
+    console.log(this.userVenues);
+    
+		const userVenuesRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/venues')
+		let instance = this
+		userVenuesRef.on("value", function(snap) {
+      if (snap.val() !== null) {
+      const vals = snap.val()
+      instance.userVenues = []
+      vals.forEach(val => {
+        instance.userVenues.push(val)
+      });
+      instance.dataLoaded = true
+              
+      } else {
+        getDefaultVenues()        
+      }
+		})
+    function getDefaultVenues() {
+      console.log("defaults gotted");
       
+		const defaultVenues = firebase.database().ref('default-venues')
+      defaultVenues.on("value", function(snap) {
+      const vals = snap.val()
+      instance.userVenues = []
+      vals.forEach(val => {
+        instance.userVenues.push(val)
+      });
+      
+      userVenuesRef.set(snap.val())
+      instance.dataLoaded = true
+		})
+    }
+    console.log(this.dataLoaded);
+    console.log(this.userVenues);
+    
+    
+  },
+  methods: {
+    editing(venueID) {
+      return this.currentlyEditing === venueID
+    },
+    edit(venueID, id){
+      this.currentlyEditing = venueID
+
       // these just move us to the right place to see which thing we are editing
       window.location.hash = id
       window.scrollBy(0, -30)
@@ -88,8 +134,10 @@ export default {
     cancelEditing() {
       this.currentlyEditing = ''
     },
-    confirmEditing(venueName) {
-      console.log("confirmed edit for" + venueName)
+    confirmEditing(venue, index) {
+      console.log("confirmed edit for" + venue.venueID + "index is " + index)
+      const targetRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/venues/' + index)
+      targetRef.set(venue)      
     }
   }
 }

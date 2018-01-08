@@ -4,6 +4,7 @@ import VueResource from 'vue-resource'
 
 import Dashboard from '@/components/Dashboard'
 import Login from '@/components/Login'
+import SignUp from '@/components/SignUp'
 import AddShowForm from '@/components/AddShowForm'
 import NewsTicker from '@/components/NewsTicker'
 import DisplayNewsTicker from '@/components/DisplayNewsTicker'
@@ -51,6 +52,11 @@ let router = new Router({
       path: "/login",
       name: "Login",
       component: Login
+    },
+    {
+      path: "/sign-up",
+      name: "SignUp",
+      component: SignUp
     },
     {
       path: "/",

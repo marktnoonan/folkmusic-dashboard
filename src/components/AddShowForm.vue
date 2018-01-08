@@ -133,7 +133,7 @@ export default {
 				return;
 			}
 			let showCells = this.showCells
-			if (showCells[7].content !== '' && showCells[8].content !== '') {
+			if (showCells[7].content !== '' && showCells[8].content !== '' && showCells[0].content !== '') {
 				this.safeToAddShow = true
 			}
 			if (this.safeToAddShow) {
@@ -160,14 +160,14 @@ export default {
 						// unless firebase does that automatically.
 					} else {
 						instance.messageAfterSubmit = 'Show saved!'
+						instance.resetVenueList()
 					}
 				})
-
 				archiveRef.push(rowContent)
 			} else {
-				alert('Please check the address')
+				alert("Please make sure there is a date for this show")
 			}
-			this.resetVenueList()
+			
 		},
 		resetVenueList() {
 			this.showVenueList = true
@@ -209,7 +209,6 @@ export default {
 					}
 				)
 		},
-		submitShow: function(showCells) {},
 		increaseSelection() {
 			if (this.venueSearch.length){
 				if (this.willBeSelected < this.possibleVenues.length - 1){
