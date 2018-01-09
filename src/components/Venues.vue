@@ -64,6 +64,7 @@
 </template>
 
 <script>
+
 import StandardButton from './StandardButton'
 import SmallButton from './SmallButton'
 
@@ -82,9 +83,6 @@ export default {
 		}
   },
   mounted() {
-    console.log(this.dataLoaded);
-    console.log(this.userVenues);
-    
 		const userVenuesRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/venues')
 		let instance = this
 		userVenuesRef.on("value", function(snap) {
@@ -101,7 +99,6 @@ export default {
       }
 		})
     function getDefaultVenues() {
-      console.log("defaults gotted");
       
 		const defaultVenues = firebase.database().ref('default-venues')
       defaultVenues.on("value", function(snap) {
@@ -115,9 +112,6 @@ export default {
       instance.dataLoaded = true
 		})
     }
-    console.log(this.dataLoaded);
-    console.log(this.userVenues);
-    
     
   },
   methods: {
@@ -135,7 +129,6 @@ export default {
       this.currentlyEditing = ''
     },
     confirmEditing(venue, index) {
-      console.log("confirmed edit for" + venue.venueID + "index is " + index)
       const targetRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/venues/' + index)
       targetRef.set(venue)      
     }
