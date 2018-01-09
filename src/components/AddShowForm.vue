@@ -91,7 +91,7 @@ export default {
 	data() {
 		return {
 			date: null,
-			oldShows: oldShows,
+			userVenues: [],
 			showCells: [
 				{type: 'date', content: '', label: 'Date'},
 				{type: 'text', content: '', label: 'Venue'},
@@ -230,11 +230,13 @@ export default {
 	computed: {
 		possibleVenues() {
 			if (this.venueSearch.length){
+				console.log(this.venues);
+				
 			return matchSorter(
-				this.oldShows, 
+				this.userVenues, 
 				this.venueSearch, 
 				{
-					keys: [(show) => show.Venue],
+					keys: [(venue) => venue.Venue],
 					threshold: matchSorter.rankings.WORD_STARTS_WITH
 					}
 				)
@@ -244,6 +246,37 @@ export default {
 	components: {
 		StandardButton,
 		DatePicker
+	},
+	mounted() {
+		const userVenuesRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/venues')
+		let instance = this
+		userVenuesRef.on("value", function(snap) {
+      if (snap.val() !== null) {
+      const vals = snap.val()
+      instance.userVenues = []
+      vals.forEach(val => {
+        instance.userVenues.push(val)
+      });
+      instance.dataLoaded = true
+              
+      } else {
+        getDefaultVenues()        
+      }
+		})
+    function getDefaultVenues() {
+      
+		const defaultVenues = firebase.database().ref('default-venues')
+      defaultVenues.on("value", function(snap) {
+      const vals = snap.val()
+      instance.userVenues = []
+      vals.forEach(val => {
+        instance.userVenues.push(val)
+      });
+      
+      userVenuesRef.set(snap.val())
+      instance.dataLoaded = true
+		})
+    }
 	}
 }
 </script>
