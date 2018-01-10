@@ -85,8 +85,6 @@ import StandardButton from './StandardButton'
 import DatePicker from 'vue2-datepicker'
 import matchSorter, {rankings, caseRankings} from 'match-sorter'
 
-window.matchSorter = matchSorter
-
 export default {
 	data() {
 		return {

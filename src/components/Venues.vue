@@ -1,7 +1,14 @@
 <template>
   <div class="venue-container" v-if="dataLoaded">
+    <label>
+      Search for a venue <br /> 
+          <input type="text" v-model="venueSearch" /> 
+          <br>
+          <standard-button :onClick="clearSearch">List All Venues</standard-button>
+    </label>
+
     <div 
-      v-for="(venue, index) in userVenues" 
+      v-for="(venue, index) in filteredVenues" 
       :key="venue.venueID" 
       :class="{
         'venue-listing': true,
@@ -13,6 +20,9 @@
         class="edit"
         :disabled="currentlyEditing === venue.venueID"
         :onClick="edit.bind(this, venue.venueID, index)">Edit</small-button>
+      <small-button 
+        class="cancel"
+        :onClick="remove.bind(this, venue.venueID, index)">Delete</small-button>
       </h3>
       <transition name="fade">
       <form 
@@ -68,6 +78,7 @@
 import StandardButton from './StandardButton'
 import SmallButton from './SmallButton'
 
+
 import firebase from 'firebase'
 
 export default {
@@ -77,9 +88,10 @@ export default {
   },
 	data() {
 		return {
+      venueSearch: '',
       currentlyEditing: "",
       userVenues: [],
-      dataLoaded: false,
+      dataLoaded: false
 		}
   },
   mounted() {
@@ -93,7 +105,14 @@ export default {
         instance.userVenues.push(val)
       });
       instance.dataLoaded = true
-              
+
+      instance.userVenues.sort(function(a, b) {
+    var textA = a.Venue.toUpperCase();
+    var textB = b.Venue.toUpperCase();
+    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+});
+        userVenuesRef.set(snap.val())
+
       } else {
         getDefaultVenues()        
       }
@@ -107,6 +126,12 @@ export default {
       vals.forEach(val => {
         instance.userVenues.push(val)
       });
+      
+      instance.userVenues.sort(function(a, b) {
+    var textA = a.Venue.toUpperCase();
+    var textB = b.Venue.toUpperCase();
+    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+});
       
       userVenuesRef.set(snap.val())
       instance.dataLoaded = true
@@ -129,9 +154,36 @@ export default {
       this.currentlyEditing = ''
     },
     confirmEditing(venue, index) {
+
       const targetRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/venues/' + index)
       targetRef.set(venue)      
+    },
+    clearSearch(){
+      this.venueSearch = ''
+    },
+    remove(venueID, index){
+      console.log(index)
+      console.log('id ' + venueID)
     }
+  },
+
+  computed: {
+    		filteredVenues() {
+			if (this.venueSearch.length){
+				console.log(this.venues);
+				
+			return matchSorter(
+				this.userVenues, 
+				this.venueSearch, 
+				{
+					keys: [(venue) => venue.Venue],
+					threshold: matchSorter.rankings.WORD_STARTS_WITH
+					}
+				)
+			} else {
+        return this.userVenues
+      }
+		}
   }
 }
 </script>
