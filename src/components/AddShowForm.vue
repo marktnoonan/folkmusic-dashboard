@@ -84,6 +84,7 @@ import oldShows from '../assets/shows.json'
 import StandardButton from './StandardButton'
 import DatePicker from 'vue2-datepicker'
 import matchSorter, {rankings, caseRankings} from 'match-sorter'
+import VenueStore from '../stores/VenueStore.js'
 
 export default {
 	data() {
@@ -228,16 +229,14 @@ export default {
 	computed: {
 		possibleVenues() {
 			if (this.venueSearch.length){
-				console.log(this.venues);
-				
-			return matchSorter(
-				this.userVenues, 
-				this.venueSearch, 
-				{
-					keys: [(venue) => venue.Venue],
-					threshold: matchSorter.rankings.WORD_STARTS_WITH
-					}
-				)
+				return matchSorter(
+					this.userVenues, 
+					this.venueSearch, 
+					{
+						keys: [(venue) => venue.Venue],
+						threshold: matchSorter.rankings.WORD_STARTS_WITH
+						}
+					)
 			}
 		}
 	},
@@ -246,35 +245,7 @@ export default {
 		DatePicker
 	},
 	mounted() {
-		const userVenuesRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/venues')
-		let instance = this
-		userVenuesRef.on("value", function(snap) {
-      if (snap.val() !== null) {
-      const vals = snap.val()
-      instance.userVenues = []
-      vals.forEach(val => {
-        instance.userVenues.push(val)
-      });
-      instance.dataLoaded = true
-              
-      } else {
-        getDefaultVenues()        
-      }
-		})
-    function getDefaultVenues() {
-      
-		const defaultVenues = firebase.database().ref('default-venues')
-      defaultVenues.on("value", function(snap) {
-      const vals = snap.val()
-      instance.userVenues = []
-      vals.forEach(val => {
-        instance.userVenues.push(val)
-      });
-      
-      userVenuesRef.set(snap.val())
-      instance.dataLoaded = true
-		})
-    }
+		VenueStore.methods.getUserVenues(this)
 	}
 }
 </script>

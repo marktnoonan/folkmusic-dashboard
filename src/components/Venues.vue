@@ -77,10 +77,9 @@
 
 import StandardButton from './StandardButton'
 import SmallButton from './SmallButton'
-
+import VenueStore from '../stores/VenueStore.js'
 
 import firebase from 'firebase'
-
 export default {
   components: {
     StandardButton,
@@ -91,52 +90,12 @@ export default {
       venueSearch: '',
       currentlyEditing: "",
       userVenues: [],
-      dataLoaded: false
+      dataLoaded: false,
+      storeData: VenueStore.data
 		}
   },
   mounted() {
-		const userVenuesRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/venues')
-		let instance = this
-		userVenuesRef.on("value", function(snap) {
-      if (snap.val() !== null) {
-      const vals = snap.val()
-      instance.userVenues = []
-      vals.forEach(val => {
-        instance.userVenues.push(val)
-      });
-      instance.dataLoaded = true
-
-      instance.userVenues.sort(function(a, b) {
-    var textA = a.Venue.toUpperCase();
-    var textB = b.Venue.toUpperCase();
-    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-});
-        userVenuesRef.set(snap.val())
-
-      } else {
-        getDefaultVenues()        
-      }
-		})
-    function getDefaultVenues() {
-      
-		const defaultVenues = firebase.database().ref('default-venues')
-      defaultVenues.on("value", function(snap) {
-      const vals = snap.val()
-      instance.userVenues = []
-      vals.forEach(val => {
-        instance.userVenues.push(val)
-      });
-      
-      instance.userVenues.sort(function(a, b) {
-    var textA = a.Venue.toUpperCase();
-    var textB = b.Venue.toUpperCase();
-    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-});
-      
-      userVenuesRef.set(snap.val())
-      instance.dataLoaded = true
-		})
-    }
+    VenueStore.methods.getUserVenues(this)
     
   },
   methods: {
