@@ -97,7 +97,7 @@ export default {
 		}
   },
   mounted() {
-    VenueStore.methods.getUserVenues(this)    
+    VenueStore.methods.getUserVenues(this, "userVenues")    
   },
   methods: {
     editing(venueID) {

@@ -8,8 +8,8 @@ const VenueStore = {
     dataLoaded: false
   },
   methods: {
-    getUserVenues(vm) {
-      
+    getUserVenues(vm, targetProp) {
+        
       		const userVenuesRef = firebase
             .database()
             .ref(
@@ -20,22 +20,22 @@ const VenueStore = {
               const vals = snap.val()
               if (vm) {
                 //weirdness here sometimes
-              vm.userVenues = []                
-             
+              vm[targetProp] = []                
+              
               vals.forEach((val, i) => {
                 val['fBIndex'] = i
-                vm.userVenues.push(val)                
+                vm[targetProp].push(val)                
               })
               vm.dataLoaded = true
 
-              vm.userVenues.sort(function(a, b) {
+              vm[targetProp].sort(function(a, b) {
                 var textA = a.Venue.toUpperCase()
                 var textB = b.Venue.toUpperCase()
                 return textA < textB ? -1 : textA > textB ? 1 : 0
               })
               userVenuesRef.set(snap.val())
-             }
-             } else {
+              }
+            } else {
               getDefaultVenues()
             }
           })
@@ -45,12 +45,12 @@ const VenueStore = {
               .ref('default-venues')
             defaultVenues.on('value', function(snap) {
               const vals = snap.val()
-              vm.userVenues = []
+              vm[targetProp] = []
               vals.forEach(val => {
-                vm.userVenues.push(val)
+                vm[targetProp].push(val)
               })
 
-              vm.userVenues.sort(function(a, b) {
+              vm[targetProp].sort(function(a, b) {
                 var textA = a.Venue.toUpperCase()
                 var textB = b.Venue.toUpperCase()
                 return textA < textB ? -1 : textA > textB ? 1 : 0

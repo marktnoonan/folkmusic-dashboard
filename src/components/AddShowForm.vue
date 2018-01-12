@@ -245,7 +245,7 @@ export default {
 		DatePicker
 	},
 	mounted() {
-		VenueStore.methods.getUserVenues(this)
+		VenueStore.methods.getUserVenues(this, "userVenues")
 	}
 }
 </script>
