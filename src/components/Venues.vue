@@ -22,7 +22,7 @@
         :onClick="edit.bind(this, venue.venueID, index)">Edit</small-button>
       <small-button 
         class="cancel"
-        :onClick="remove.bind(this, venue.venueID, index)">Delete</small-button>
+        :onClick="remove.bind(this, venue)">Delete</small-button>
       </h3>
       <transition name="fade">
       <form 
@@ -78,7 +78,9 @@
 import StandardButton from './StandardButton'
 import SmallButton from './SmallButton'
 import VenueStore from '../stores/VenueStore.js'
+import matchSorter, {rankings, caseRankings} from 'match-sorter'
 
+window.VenueStore = VenueStore
 import firebase from 'firebase'
 export default {
   components: {
@@ -95,8 +97,7 @@ export default {
 		}
   },
   mounted() {
-    VenueStore.methods.getUserVenues(this)
-    
+    VenueStore.methods.getUserVenues(this)    
   },
   methods: {
     editing(venueID) {
@@ -112,25 +113,27 @@ export default {
     cancelEditing() {
       this.currentlyEditing = ''
     },
-    confirmEditing(venue, index) {
-
-      const targetRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/venues/' + index)
+    confirmEditing(venue) {
+      const targetRef = this.getFirebaseRef(venue)
       targetRef.set(venue)      
     },
     clearSearch(){
       this.venueSearch = ''
     },
-    remove(venueID, index){
-      console.log(index)
-      console.log('id ' + venueID)
-    }
+    remove(venue){
+      const targetRef = this.getFirebaseRef(venue)
+      targetRef.remove(()=>{
+        VenueStore.methods.getUserVenues()
+      })
+    },
+    getFirebaseRef(venue){
+      const venueIndex = venue.fBIndex
+      return firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/venues/' + venueIndex)
+  }
   },
-
   computed: {
     		filteredVenues() {
-			if (this.venueSearch.length){
-				console.log(this.venues);
-				
+			if (this.venueSearch.length){				
 			return matchSorter(
 				this.userVenues, 
 				this.venueSearch, 

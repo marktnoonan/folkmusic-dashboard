@@ -1,11 +1,15 @@
 import firebase from 'firebase'
 
+
 const VenueStore = {
   data: {
-    thing: "hello I'm the store"
+    thing: "hello I'm the store",
+    userVenues: [],
+    dataLoaded: false
   },
   methods: {
     getUserVenues(vm) {
+      
       		const userVenuesRef = firebase
             .database()
             .ref(
@@ -14,9 +18,13 @@ const VenueStore = {
           userVenuesRef.on('value', function(snap) {
             if (snap.val() !== null) {
               const vals = snap.val()
-              vm.userVenues = []
-              vals.forEach(val => {
-                vm.userVenues.push(val)
+              if (vm) {
+                //weirdness here sometimes
+              vm.userVenues = []                
+             
+              vals.forEach((val, i) => {
+                val['fBIndex'] = i
+                vm.userVenues.push(val)                
               })
               vm.dataLoaded = true
 
@@ -26,7 +34,8 @@ const VenueStore = {
                 return textA < textB ? -1 : textA > textB ? 1 : 0
               })
               userVenuesRef.set(snap.val())
-            } else {
+             }
+             } else {
               getDefaultVenues()
             }
           })
