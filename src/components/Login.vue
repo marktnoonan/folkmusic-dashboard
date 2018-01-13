@@ -2,7 +2,7 @@
   <div class="login">
     <h3>Sign In</h3>
     <input type="text" v-model="email" placeholder="Email"><br>
-    <input type="password" v-model="password" placeholder="Password"><br>
+    <input type="password" v-model="password" placeholder="Password" @keyup.enter="login"><br>
     <standard-button :onClick="login">Log In</standard-button>
     <router-link to="/sign-up">Sign Up</router-link>
   </div>
