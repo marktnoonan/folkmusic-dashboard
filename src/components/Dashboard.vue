@@ -9,6 +9,8 @@
     </ul>
 		<transition name="fade">
     	<router-view />
+					<welcome />
+
 		</transition>
 <br><br>
 
@@ -18,6 +20,7 @@
 <script>
 import firebase from "firebase"
 import StandardButton from "./StandardButton"
+import Welcome from "./Welcome"
 
 export default {
 	name: "Dashboard",
@@ -43,7 +46,8 @@ export default {
 		}
 	},
 	components: {
-    StandardButton
+		StandardButton,
+		Welcome
   }
   
 };
