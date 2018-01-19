@@ -9,7 +9,7 @@
     </ul>
 		<transition name="fade">
     	<router-view />
-					<welcome />
+					<!-- <welcome /> -->
 
 		</transition>
 <br><br>
