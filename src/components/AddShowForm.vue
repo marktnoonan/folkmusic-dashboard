@@ -68,10 +68,13 @@ inputs dynamically, so everything is just laid out literally below.
     <span>{{showCells[8].label}}</span><br>
     <input v-model="showCells[8].content" type="number" step="any"/>
   	</label>
-		<standard-button type="button" :onClick="geocode" class="geocode">Check Address</standard-button>
+		<small-button type="button" :onClick="geocode" class="geocode">Check Address</small-button>
   </fieldset>
-		<standard-button type="button" :onClick="resetVenueList" class="reset">Clear and Reset Details</standard-button> 
+	<div>
+		<standard-button type="button" :onClick="resetVenueList" class="reset">Clear Form</standard-button> 
   	<standard-button type="submit" class="submit">Add Show</standard-button> 
+	</div>
+		
   {{messageAfterSubmit}}
 </form>
 
@@ -82,6 +85,7 @@ inputs dynamically, so everything is just laid out literally below.
 import firebase from 'firebase'
 import oldShows from '../assets/shows.json'
 import StandardButton from './StandardButton'
+import SmallButton from './SmallButton'
 import DatePicker from 'vue2-datepicker'
 import matchSorter, {rankings, caseRankings} from 'match-sorter'
 import VenueStore from '../stores/VenueStore.js'
@@ -90,7 +94,7 @@ export default {
 	data() {
 		return {
 			date: null,
-			userVenues: [],
+			userVenues: oldShows,
 			showCells: [
 				{type: 'date', content: '', label: 'Date'},
 				{type: 'text', content: '', label: 'Venue'},
@@ -242,6 +246,7 @@ export default {
 	},
 	components: {
 		StandardButton,
+		SmallButton,
 		DatePicker
 	},
 	mounted() {
@@ -272,6 +277,10 @@ textarea,
 	padding: 10px;
 	font-size: 0.9em;
 	width: 90%;
+}
+
+textarea {
+	resize: none
 }
 
 label {

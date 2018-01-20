@@ -32,7 +32,12 @@ export default {
 }
 
 * {
-  box-sizing: border-box
+  box-sizing: border-box;
+  border-radius: 6px;
+}
+
+input {
+    border: 1px solid #575757;
 }
 
 </style>
