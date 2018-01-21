@@ -10,7 +10,7 @@ inputs dynamically, so everything is just laid out literally below.
 
 <form autocomplete="off" @submit.prevent="onSubmit">
 		<fieldset>
-	    <span>{{showCells[0].label}}</span>
+	    <span>{{showCells[0].label}}</span><br>
 			<date-picker v-model="showCells[0].content" lang="en" input-class="date-input"></date-picker>
 		</fieldset>
     <label class="venue-name">
@@ -259,7 +259,7 @@ export default {
 form {
 	display: grid;
 	grid-gap: 10px;
-	grid-template-columns: 230px 230px;
+	grid-template-columns: 1fr 1fr;
 }
 
 fieldset {
@@ -318,10 +318,11 @@ ul {
 	background-color: #444;
 	color: #ccc;
 	box-sizing: border-box;
-	width: 231px;
+	width: 207px;
 	padding: 0px;
 	position: absolute;
 	transform: translate(0, -22px);
+	border-radius: 0;
 }
 
 li {

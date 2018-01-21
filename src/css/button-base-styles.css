@@ -4,9 +4,17 @@ button {
 	margin-right: auto;
 	border-radius: 4px;
 	background-color: powderblue;
-	border: 1px solid rgba(0, 0, 0, 0.4)
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.7);
 }
 
-button:hover {
-	background-color: lightgrey
+button:hover, button:focus {
+	box-shadow: 0 2px 5px -1px rgba(0, 0, 0, 0.7);
+	outline: none;
+	border-color: rgba(0, 0, 0, 0.4);
+}
+
+button:active {
+	box-shadow: 0 1px 5px -1px rgba(0, 0, 0, 0.7);
+	transform: translateY(1px);
 }

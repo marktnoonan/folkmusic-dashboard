@@ -5,7 +5,7 @@
       <li><router-link to="/dashboard/venues">Stored Venues</router-link></li>
       <li><router-link to="/dashboard/news-ticker">Edit News Ticker</router-link></li>
       <li><router-link to="/dashboard/display-news-ticker">Preview News Ticker</router-link></li>
-      <li><standard-button :onClick="logout">Log Out</standard-button></li>
+      <li><small-button :onClick="logout">Log Out</small-button></li>
     </ul>
 		<transition name="fade">
     	<router-view />
@@ -20,6 +20,7 @@
 <script>
 import firebase from "firebase"
 import StandardButton from "./StandardButton"
+import SmallButton from "./SmallButton"
 import Welcome from "./Welcome"
 
 export default {
@@ -47,6 +48,7 @@ export default {
 	},
 	components: {
 		StandardButton,
+		SmallButton,
 		Welcome
   }
   
