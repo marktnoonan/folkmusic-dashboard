@@ -176,6 +176,7 @@ export default {
 			this.showVenueList = true
 			this.venueSearch = ''
 			this.willBeSelected = 0
+			this.addressDetails = ''
 			this.showCells.forEach(cell => (cell.content = ''))
 		},
 		geocode: function() {
@@ -256,10 +257,13 @@ export default {
 </script>
 
 <style scoped>
-form {
+form {    
+	padding-top: 4vw;
+	max-width: 600px;
 	display: grid;
 	grid-gap: 10px;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	margin: 0 auto;
 }
 
 fieldset {
@@ -276,7 +280,7 @@ textarea,
 .date-input {
 	padding: 10px;
 	font-size: 0.9em;
-	width: 90%;
+	width: 100%;
 }
 
 textarea {
