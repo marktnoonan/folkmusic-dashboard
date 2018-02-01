@@ -9,8 +9,6 @@
     </ul>
 		<transition name="fade">
     	<router-view />
-					<!-- <welcome /> -->
-
 		</transition>
 <br><br>
 
@@ -28,9 +26,8 @@ export default {
 	data() {
 		return {
 			safeToAddShow: false,
-      displayAddShowForm: false,
       successMessage: '',
-      newsTickerItems: []
+			newsTickerItems: []
 		};
 	},
 	methods: {
@@ -41,9 +38,6 @@ export default {
 				.then(() => {
 					this.$router.replace("login");
 				});
-		},
-		toggleAddShowForm() {
-			this.displayAddShowForm = !this.displayAddShowForm;
 		}
 	},
 	components: {
