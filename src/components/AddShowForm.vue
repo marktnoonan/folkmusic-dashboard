@@ -81,12 +81,11 @@ inputs dynamically, so everything is just laid out literally below.
   	<standard-button type="submit" class="submit">Add Show</standard-button> 
 	</div>
 
-  {{messageAfterSubmit}}
 </form>
 	<div><br>
 		<h3>Shows Added</h3>
 		<ul class="shows-added-list">
-			<li v-for="show in showsAddedThisSession" :key="show[0]">{{show[0]}} - {{show[1]}}</li>
+			<li v-for="show in showsAddedThisSession" :key="show[0]">{{show[0]}} - {{show[1]}}, {{show[5]}}</li>
 		</ul>
 		
 	</div>
@@ -259,7 +258,8 @@ export default {
 							this.showCells[8].content = location.geometry.lng
 							
 							if (this.showCells[5].content === '') {
-								this.showCells[5].content === location.components.city
+								console.log(location.components)
+								this.showCells[5].content = `${location.components.city}, ${location.components.state_code}`
 							}
 							
 							if (when === "at submit time") {
