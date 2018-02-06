@@ -7,11 +7,17 @@ I had planned to just have a v-for loop over the input elements, but vue does no
 inputs dynamically, so everything is just laid out literally below.
 -->
 
-
+<div class="wrapper">
 <form autocomplete="off" @submit.prevent="onSubmit">
 		<fieldset>
 	    <span>{{showCells[0].label}}</span><br>
-			<date-picker v-model="showCells[0].content" lang="en" input-class="date-input"></date-picker>
+			<date-picker 
+				v-model="showCells[0].content" 
+				lang="en" 
+				input-class="date-input"
+				width="220"
+				@input="confirmDateExists"
+				></date-picker>
 		</fieldset>
     <label class="venue-name">
     <span>{{showCells[1].label}}</span><br>
@@ -21,8 +27,9 @@ inputs dynamically, so everything is just laid out literally below.
 			@keyup.down="increaseSelection" 
 			@keyup.up="decreaseSelection"
 		  @keyup.enter.prevent="confirmSelection"
+			@change="confirmTextExists"
 		/>
-    <ul id="venues">
+    <ul id="venues" class="venue-ul">
         <li 
           v-for="(show, index) in possibleVenues"
           v-if="showVenueList" 
@@ -56,7 +63,7 @@ inputs dynamically, so everything is just laid out literally below.
   </label>  
     <label class="address">
     <span>{{showCells[6].label}}</span><br>
-    <textarea v-model="showCells[6].content" rows="6"/>
+    <textarea v-model="showCells[6].content" @blur="geocode()" @change="confirmTextExists" rows="6"/>
     <span class="address-details">{{addressDetails}}</span>
   </label>  
   <fieldset class="latlong">
@@ -68,16 +75,22 @@ inputs dynamically, so everything is just laid out literally below.
     <span>{{showCells[8].label}}</span><br>
     <input v-model="showCells[8].content" type="number" step="any"/>
   	</label>
-		<small-button type="button" :onClick="geocode" class="geocode">Check Address</small-button>
   </fieldset>
 	<div>
 		<standard-button type="button" :onClick="resetVenueList" class="reset">Clear Form</standard-button> 
   	<standard-button type="submit" class="submit">Add Show</standard-button> 
 	</div>
-		
+
   {{messageAfterSubmit}}
 </form>
-
+	<div><br>
+		<h3>Shows Added</h3>
+		<ul class="shows-added-list">
+			<li v-for="show in showsAddedThisSession" :key="show[0]">{{show[0]}} - {{show[1]}}</li>
+		</ul>
+		
+	</div>
+</div>
 
 </template>
 
@@ -110,11 +123,22 @@ export default {
 			willBeSelected: 0,
 			addressDetails: '',
 			showVenueList: true,
-			messageAfterSubmit: ''
+			messageAfterSubmit: '',
+			showsAddedThisSession: []
 		}
 	},
 	props: {},
+	events: {
+		input: function() {
+			console.log("dateInput");
+			
+		}
+	},
 	methods: {
+		logDateChange(){
+			console.log("hi there date input");
+			
+		},
 		populateVenueDetails(show) {
 			this.venueSearch = show.Venue
 			// adjusting for labels clearer in the UI than they are in the Google Sheet
@@ -131,15 +155,55 @@ export default {
 			})
 			this.showVenueList = false
 		},
-		onSubmit() {
-			if (this.showCells[1].content === ""){
-				return;
+		onSubmit() {			
+			if (this.showCells[1].content === '' && this.venueSearch === ''){
+				this.addFormError('.venue-name > input')				
+				alert('Show must have a venue')
+				return
+			} else if (this.showCells[1].content === '' && this.venueSearch !== ''){
+				// covers the case where we are using a venue that's not in the database
+				this.showCells[1].content = this.venueSearch
+				this.clearFormError('.venue-name > input')
+				// TODO: add checkbox to save new venues at this point.
 			}
 			let showCells = this.showCells
 			if (showCells[7].content !== '' && showCells[8].content !== '' && showCells[0].content !== '') {
 				this.safeToAddShow = true
-			}
+			}	else if (showCells[0].content === '') {
+				alert("Show must have a date")
+				this.addFormError('.mx-datepicker')
+				return
+			} else if (showCells[7].content === '' || showCells[8].content === '') {
+				if (showCells[6].content !== ''){
+				this.geocode("at submit time")
+				} else {
+				this.addFormError('.address > textarea')
+					alert("Show must have an address")	
+					return
+				}
+			
+			} 
+
 			if (this.safeToAddShow) {
+				this.saveShow()
+			} 
+			
+		},
+		clearFormError(selector) {
+				if (this.fieldError(selector)){
+					document.querySelector(selector).classList.remove('form-error')	
+				}
+			},
+		addFormError(selector){
+				if (!this.fieldError(selector))
+				document.querySelector(selector).classList.add('form-error')
+			},
+		fieldError(selector){
+				return Array.from(document.querySelector(selector).classList).includes('form-error')
+			},
+		saveShow() {
+				let showCells = this.showCells
+
 				let rowContent = showCells.map(cell => {
 					return cell.content
 				})
@@ -163,14 +227,12 @@ export default {
 						// unless firebase does that automatically.
 					} else {
 						instance.messageAfterSubmit = 'Show saved!'
+						setTimeout(() => instance.messageAfterSubmit = '', 2000)
 						instance.resetVenueList()
+						instance.showsAddedThisSession.unshift(rowContent)
 					}
 				})
 				archiveRef.push(rowContent)
-			} else {
-				alert("Please make sure there is a date for this show")
-			}
-			
 		},
 		resetVenueList() {
 			this.showVenueList = true
@@ -179,7 +241,7 @@ export default {
 			this.addressDetails = ''
 			this.showCells.forEach(cell => (cell.content = ''))
 		},
-		geocode: function() {
+		geocode: function(when) {
 			this.$http
 				.get(
 					'https://api.opencagedata.com/geocode/v1/json?q=' +
@@ -195,6 +257,15 @@ export default {
                                 ${location.components.country}`
 							this.showCells[7].content = location.geometry.lat
 							this.showCells[8].content = location.geometry.lng
+							
+							if (this.showCells[5].content === '') {
+								this.showCells[5].content === location.components.city
+							}
+							
+							if (when === "at submit time") {
+								this.saveShow()
+							}
+							
 						} catch (error) {
 							if (this.showCells[6].content !== '') {
 								this.addressDetails = `No location found for "${this
@@ -205,11 +276,8 @@ export default {
 							}
 							// in case we had already set them:
 							this.showCells[7].content = ''
-							this.showCells[8].content = ''
+							this.showCells[8].content = ''					
 						}
-					},
-					response => {
-						console.log(response)
 					}
 				)
 		},
@@ -229,6 +297,16 @@ export default {
 		},
 		confirmSelection(event) {
 			this.populateVenueDetails(this.possibleVenues[this.willBeSelected])
+		},
+		confirmTextExists(event) {
+			if (event.path[0].value.length > 0) {
+				event.path[0].classList.remove('form-error')
+			}
+		},
+		confirmDateExists() {
+			if (this.showCells[0].content !== '') {
+			  this.clearFormError('.mx-datepicker')
+			}
 		}
 	},
 	computed: {
@@ -245,6 +323,7 @@ export default {
 			}
 		}
 	},
+	
 	components: {
 		StandardButton,
 		SmallButton,
@@ -315,7 +394,7 @@ label {
 	background-color: rgb(225, 134, 134);
 }
 
-ul {
+.venue-ul {
 	list-style-type: none;
 	text-align: left;
 	display: block;
@@ -342,4 +421,32 @@ h3 {
 	background-color: rgba(255, 255, 255, 0.5);
 	padding: 2px;
 }
+.fade-enter-active {
+  transition: opacity .3s;
+}
+.fade-leave-active {
+  transition: all 0
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.form-error {
+	box-shadow: 0px 0px 2px 2px orangered;
+}
+
+.shows-added-list {
+	margin-top: 0;
+	list-style-type: initial;
+	text-align: left;
+	display: block;
+	background-color: initial;
+	color: initial;
+	box-sizing: border-box;
+	width: initial;
+	position: absolute;
+	border-radius: 0;
+}
+
 </style>

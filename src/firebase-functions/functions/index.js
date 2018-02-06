@@ -9,8 +9,6 @@ const FUNCTIONS_CLIENT_ID = functions.config().googleapi.client_id
 const FUNCTIONS_SECRET_KEY = functions.config().googleapi.client_secret
 const FUNCTIONS_REDIRECT =
   'https://us-central1-folkmusic-dashboard.cloudfunctions.net/OauthCallback'
-// TODO: use firebase functions:config:set to configure your Google API client ID and secret
-// Also update FUNCTIONS_REDIRECT
 
 const googleAuth = require('google-auth-library')
 const google = require('googleapis')
@@ -37,7 +35,6 @@ exports.authGoogleAPI = functions.https.onRequest((req, res) =>
   )
 )
 
-// after you grant access, you will be redirected to the URL for this Function
 // this Function stores the tokens to your Firebase database
 const DB_TOKEN_PATH = '/api_tokens'
 exports.OauthCallback = functions.https.onRequest((req, res) => {
@@ -129,6 +126,7 @@ function appendPromise(requestWithoutAuth) {
 
 const SHEET_ID = '1qBzb28aANiAScJbuDuAmeOukUzZQiIP6wZapF2bPMgw'
 const DATA_PATH = '/users/0N9SNPfstqftKscuZ5AaqWHMAzp2/showsToAdd'
+
 // trigger function to write to Sheet when new data comes in on DATA_PATH
 exports.appendRecordToSpreadsheet = functions.database.ref(`${DATA_PATH}/{ITEM}`).onWrite(
   (event) => {

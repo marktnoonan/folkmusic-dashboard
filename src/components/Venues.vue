@@ -1,7 +1,7 @@
 <template>
   <div class="venue-container" v-if="dataLoaded">
     <label>
-      Search for a venue <br /> 
+      Search for a venue by name:<br /> 
           <input type="text" v-model="venueSearch" /> 
           <br>
           <standard-button :onClick="clearSearch">List All Venues</standard-button>
