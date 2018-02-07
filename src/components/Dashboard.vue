@@ -19,8 +19,6 @@
 import firebase from "firebase"
 import StandardButton from "./StandardButton"
 import SmallButton from "./SmallButton"
-import Welcome from "./Welcome"
-
 export default {
 	name: "Dashboard",
 	data() {
@@ -42,8 +40,7 @@ export default {
 	},
 	components: {
 		StandardButton,
-		SmallButton,
-		Welcome
+		SmallButton
   }
   
 };

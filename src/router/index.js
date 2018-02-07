@@ -9,6 +9,7 @@ import AddShowForm from '@/components/AddShowForm'
 import NewsTicker from '@/components/NewsTicker'
 import DisplayNewsTicker from '@/components/DisplayNewsTicker'
 import Venues from '@/components/Venues'
+import Welcome from '@/components/Welcome'
 
 import firebase from 'firebase'
 
@@ -44,6 +45,11 @@ let router = new Router({
           path: "venues",
           name: "Venues",
           component: Venues
+        },
+        {
+        	path: "welcome",
+        	name: "Welcome",
+        	component: Welcome
         }
 
       ]
@@ -74,7 +80,7 @@ router.beforeEach((to, from, next) => {
   let requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
   if (requiresAuth && !currentUser) next('login')
-  else if (!requiresAuth && currentUser) next('dashboard')
+  else if (!requiresAuth && currentUser) next('/dashboard')
   else next()
 })
 

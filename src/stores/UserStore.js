@@ -1,7 +1,8 @@
 import firebase from 'firebase'
+
 const VenueStore = {
   data: {
-    username: "Zelda",
+    username: "no user is set",
     dataLoaded: false
   },
   methods: {

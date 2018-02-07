@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import firebase from 'firebase'
 import config from './firebase-config'
+import UserStore from './stores/UserStore'
 
 Vue.config.productionTip = false
 
@@ -20,6 +21,7 @@ firebase.auth().onAuthStateChanged(function (user) {
 			template: "<App/>",
 			components: {App}
 		})
+		UserStore.data.username = user.email
   }
 })
 
