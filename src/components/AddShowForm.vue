@@ -4,10 +4,16 @@ A couple of things about this form. Autcomplete is off because user will be ente
 We have a simplified form of autocomplete to fill data based on previous versions.
 
 I had planned to just have a v-for loop over the input elements, but vue does not like to set the type of
-inputs dynamically, so everything is just laid out literally below.
--->
+inputs dynamically, so everything is just laid out literally below. -->
+
 
 <div class="wrapper">
+    <modal
+      v-show="isModalVisible"
+      @close="closeModal"
+    >
+		<div slot="body">{{modalMessage}}</div>
+		</modal>
 <form autocomplete="off" @submit.prevent="onSubmit">
 		<fieldset>
 	    <span>{{showCells[0].label}}</span><br>
@@ -28,6 +34,7 @@ inputs dynamically, so everything is just laid out literally below.
 			@keyup.up="decreaseSelection"
 		  @keyup.enter.prevent="confirmSelection"
 			@change="confirmTextExists"
+			id="venue-input"
 		/>
     <ul id="venues" class="venue-ul">
         <li 
@@ -85,7 +92,7 @@ inputs dynamically, so everything is just laid out literally below.
 	<div><br>
 		<h3>Shows Added</h3>
 		<ul class="shows-added-list">
-			<li v-for="show in showsAddedThisSession" :key="show[0]">{{show[0]}} - {{show[1]}}, {{show[5]}}</li>
+			<li v-for="(show, index) in showsAddedThisSession" :key="show[0]+index">{{show[0]}} - {{show[1]}}, {{show[5]}}</li>
 		</ul>
 		
 	</div>
@@ -101,6 +108,7 @@ import SmallButton from './SmallButton'
 import DatePicker from 'vue2-datepicker'
 import matchSorter, {rankings, caseRankings} from 'match-sorter'
 import VenueStore from '../stores/VenueStore.js'
+import Modal from './Modal'
 
 export default {
 	data() {
@@ -123,21 +131,15 @@ export default {
 			addressDetails: '',
 			showVenueList: true,
 			messageAfterSubmit: '',
-			showsAddedThisSession: []
+			showsAddedThisSession: [],
+			isModalVisible: false,
+			modalMessage: ''
 		}
 	},
 	props: {},
 	events: {
-		input: function() {
-			console.log("dateInput");
-			
-		}
 	},
 	methods: {
-		logDateChange(){
-			console.log("hi there date input");
-			
-		},
 		populateVenueDetails(show) {
 			this.venueSearch = show.Venue
 			// adjusting for labels clearer in the UI than they are in the Google Sheet
@@ -154,10 +156,11 @@ export default {
 			})
 			this.showVenueList = false
 		},
-		onSubmit() {			
+		onSubmit() {
+			document.querySelector('.submit').blur()			
 			if (this.showCells[1].content === '' && this.venueSearch === ''){
 				this.addFormError('.venue-name > input')				
-				alert('Show must have a venue')
+				this.showModal('Show must have a venue')
 				return
 			} else if (this.showCells[1].content === '' && this.venueSearch !== ''){
 				// covers the case where we are using a venue that's not in the database
@@ -169,7 +172,7 @@ export default {
 			if (showCells[7].content !== '' && showCells[8].content !== '' && showCells[0].content !== '') {
 				this.safeToAddShow = true
 			}	else if (showCells[0].content === '') {
-				alert("Show must have a date")
+				this.showModal("Show must have a date")
 				this.addFormError('.mx-datepicker')
 				return
 			} else if (showCells[7].content === '' || showCells[8].content === '') {
@@ -177,7 +180,7 @@ export default {
 				this.geocode("at submit time")
 				} else {
 				this.addFormError('.address > textarea')
-					alert("Show must have an address")	
+					this.showModal("Show must have an address")	
 					return
 				}
 			
@@ -307,7 +310,15 @@ export default {
 			if (this.showCells[0].content !== '') {
 			  this.clearFormError('.mx-datepicker')
 			}
-		}
+		},
+		showModal(msg) {
+			this.modalMessage = msg
+      this.isModalVisible = true
+		},
+	  closeModal() {
+			this.isModalVisible = false
+			this.modalMessage = ''
+    }
 	},
 	computed: {
 		possibleVenues() {
@@ -323,11 +334,11 @@ export default {
 			}
 		}
 	},
-	
 	components: {
 		StandardButton,
 		SmallButton,
-		DatePicker
+		DatePicker,
+		Modal
 	},
 	mounted() {
 		VenueStore.methods.getUserVenues(this, "userVenues")
