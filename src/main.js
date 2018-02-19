@@ -21,7 +21,10 @@ firebase.auth().onAuthStateChanged(function (user) {
 			template: "<App/>",
 			components: {App}
 		})
-		UserStore.data.username = user.email
+
+		if (user) {
+			UserStore.data.username = user.email
+		}
   }
 })
 

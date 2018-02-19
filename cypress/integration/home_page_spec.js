@@ -1,7 +1,20 @@
-const mountVue = require('cypress-vue-unit-test')
 
 describe('The Home Page', function () {
+  
   it('successfully loads', function () {
-    cy.visit('http://localhost:8080')
+    cy.visit('http://localhost:8888/folkmusic-dashboard/dist')
+  })
+
+  it('logs the user in', function () {
+    cy.get('input[type=text]')
+      .type('test@test.test')
+    cy.get('input[type=password]')
+      .type('testuser{enter}')
+    
+  })
+
+  it('logs the user out', function () {
+    cy.contains('Log Out').click()
   })
 })
+

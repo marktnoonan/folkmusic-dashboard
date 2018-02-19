@@ -1,11 +1,11 @@
 <template>
   <div class="login">
     <h3>Sign In</h3>
-    <input type="text" v-model="email" placeholder="Email"><br>
-    <input type="password" v-model="password" placeholder="Password" @keyup.enter="login"><br>
+
+    <input autocomplete="off" type="text" v-model="email" placeholder="Email"><br>
+    <input autocomplete="off" type="password" v-model="password" placeholder="Password" @keyup.enter="login"><br>
     <standard-button :onClick="login">Log In</standard-button> or 
     <router-link to="/sign-up">Sign Up</router-link>
-    
     <div v-if="messageToUser" class="message-to-user">{{messageToUser}}</div>
   </div>
 </template>
@@ -26,6 +26,7 @@
     },
     methods: {
       login: function () {
+        if (this.email && this.password) {
         firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
           (user) => {
           this.$router.replace('dashboard/welcome')  
@@ -36,6 +37,10 @@
             this.messageToUser = "Login failed: " + err.message
           }
         )
+        } else {
+          console.log('nothing entered')
+        }
+
       }
     },
     components: {

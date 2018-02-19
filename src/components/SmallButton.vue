@@ -9,7 +9,8 @@
 export default {
   props: {
       onClick: {
-      default: function(){
+      default: function () {
+        console.log('clicked')
         return
       },
       type: Function,
