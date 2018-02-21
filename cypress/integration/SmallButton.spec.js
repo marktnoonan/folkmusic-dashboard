@@ -29,7 +29,7 @@ describe('Small button with slot and passed function', function () {
   beforeEach(mountVue({ template, components, methods }))
 
   it('says hello', () => {
-    cy.get('button').contains('Hello').click()
+    cy.get('button').contains('Hello')
   })
 
   it.only('runs the function passed to it', () => {
