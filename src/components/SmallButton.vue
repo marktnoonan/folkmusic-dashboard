@@ -4,18 +4,14 @@
         Small button with no text content!
       </slot>
     </button>
+    
 </template>
 <script>
+import {ClickHandlerAsProp} from '../stores/HelperStore.js'
+
 export default {
   props: {
-      onClick: {
-      default: function () {
-        console.log('clicked')
-        return
-      },
-      type: Function,
-      required: false
-    }
+      onClick: ClickHandlerAsProp
   }
 }
 </script>

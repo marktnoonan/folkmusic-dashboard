@@ -6,15 +6,11 @@
     </button>
 </template>
 <script>
+import {ClickHandlerAsProp} from '../stores/HelperStore.js'
+
 export default {
   props: {
-      onClick: {
-      default: function(){
-        return
-      },
-      type: Function,
-      required: false
-    }
+      onClick: ClickHandlerAsProp
   }
 }
 </script>
