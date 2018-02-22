@@ -46,7 +46,7 @@
         </label>
         <label>
           Ticket Phone
-          <input type="text" v-model="venue['Phone Number']" />
+          <input type="tel" v-model="venue['Phone Number']" />
         </label>
         <label>
           Previous Ticket Link
