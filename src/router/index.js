@@ -65,11 +65,7 @@ let router = new Router({
       component: SignUp
     },
     {
-      path: "/",
-      redirect: "/login"
-    },
-    {
-      path: "*",
+      path: "/*",
       redirect: "/login"
     }
   ]
