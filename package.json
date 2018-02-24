@@ -29,7 +29,7 @@
     "chalk": "^2.0.1",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.0",
-    "cypress": "^2.0.1",
+    "cypress": "^2.0.3",
     "cypress-vue-unit-test": "0.0.0-development",
     "eventsource-polyfill": "^0.9.6",
     "extract-text-webpack-plugin": "^3.0.0",
