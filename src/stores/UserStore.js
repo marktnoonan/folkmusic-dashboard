@@ -1,12 +1,10 @@
-import firebase from 'firebase'
-
-const VenueStore = {
-  data: {
-    username: "no user is set",
-    dataLoaded: false
-  },
-  methods: {
-  }
+  const UserStore = {
+  state: {
+      username: "no user is set",
+    },
+    set(prop, payload) {
+      this.state[prop] = payload
+    }
 }
 
-export default VenueStore
+export default UserStore

@@ -1,8 +1,10 @@
 <template>
   <div>
     <h2>
-      Hi, {{username}}.
+      Hi, {{state.username}}.
     </h2>
+
+    <button @click="logUser">Log User</button>
   </div>
 </template>
 
@@ -12,9 +14,19 @@ import UserStore from '../stores/UserStore.js'
   export default {
     data() {
       return {
-        username: UserStore.data.username
+        state: UserStore.state
       }
+    },
+      created() {   
+      console.log("when created, user is: " + this.state.username)
+  },
+  methods: {
+    logUser(){
+      UserStore.set("username","cake")
+      console.log("user is: " + this.state.username)      
+      this.$forceUpdate()
     }
+  }
   }
 </script>
 

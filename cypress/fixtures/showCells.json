@@ -1,10 +1,5 @@
 [
   {
-    "type": "date",
-    "content": "",
-    "label": "Date"
-  },
-  {
     "type": "text",
     "content": "",
     "label": "Venue"

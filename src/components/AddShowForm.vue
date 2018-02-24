@@ -27,7 +27,7 @@ inputs dynamically, so everything is just laid out literally below. -->
 		</fieldset>
     <label class="venue-name">
     <span>{{showCells[1].label}}</span><br>
-    <input 
+    <input
 			v-model="venueSearch" 
 			type="text" 
 			@keyup.down="increaseSelection" 
@@ -52,10 +52,8 @@ inputs dynamically, so everything is just laid out literally below. -->
         </li>
       </ul>
     </label>
-    <label class="description">
-    <span>{{showCells[2].label}}</span><br>
-    <input v-model="showCells[2].content" type="text"/>
-  </label>  
+		<fm-input :cell="showCells[2]" />
+
     <label class="phone">
     <span>{{showCells[3].label}}</span><br>
     <input v-model="showCells[3].content" type="tel"/>
@@ -103,6 +101,7 @@ inputs dynamically, so everything is just laid out literally below. -->
 <script>
 import firebase from 'firebase'
 import oldShows from '../assets/shows.json'
+import FmInput from './FmInput'
 import StandardButton from './StandardButton'
 import SmallButton from './SmallButton'
 import DatePicker from 'vue2-datepicker'
@@ -335,6 +334,7 @@ export default {
 		}
 	},
 	components: {
+		FmInput,
 		StandardButton,
 		SmallButton,
 		DatePicker,

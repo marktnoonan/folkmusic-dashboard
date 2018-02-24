@@ -20,6 +20,7 @@ let router = new Router({
   routes: [
     {
       path: "/dashboard",
+      redirect: "/dashboard/welcome",
       name: "Dashboard",
       component: Dashboard,
       meta: {

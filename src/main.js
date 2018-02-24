@@ -14,6 +14,8 @@ let app
 firebase.initializeApp(config)
   
 firebase.auth().onAuthStateChanged(function (user) {
+	console.log("firebase auth state changed!");
+	
   if (!app) {
     app = new Vue({
 			el: "#app",
@@ -21,11 +23,13 @@ firebase.auth().onAuthStateChanged(function (user) {
 			template: "<App/>",
 			components: {App}
 		})
-
+	}
 		if (user) {
-			UserStore.data.username = user.email
+			UserStore.set('username', user.email)
 		}
-  }
+		if (!user) {
+			UserStore.set('username', 'old person is gone now')
+		}
 })
 
 /* eslint-disable no-new */
