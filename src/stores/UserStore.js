@@ -1,6 +1,6 @@
   const UserStore = {
   state: {
-      username: "no user is set",
+      username: '',
     },
     set(prop, payload) {
       this.state[prop] = payload
