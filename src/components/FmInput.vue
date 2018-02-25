@@ -12,6 +12,8 @@
 </template>
 
 <script>
+  import ShowCellsStore from '../stores/ShowCellsStore.js'
+
   export default {
     data() {
       return {
@@ -21,7 +23,6 @@
     methods: {
       input (element) {
         this.$emit('entered', this.content)
-        console.log('inputted')
       }
     },
     props: {

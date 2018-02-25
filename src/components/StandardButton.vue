@@ -6,7 +6,7 @@
     </button>
 </template>
 <script>
-import {ClickHandlerAsProp} from '../stores/HelperStore.js'
+import {ClickHandlerAsProp} from '../helpers'
 
 export default {
   props: {

@@ -1,6 +1,6 @@
 const ClickHandlerAsProp = {
   default: function () {
-    console.log('clicked in nested handler')
+    console.log('default clicked in nested handler')
     return
   },
   type: Function,

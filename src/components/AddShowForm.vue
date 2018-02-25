@@ -52,7 +52,8 @@ inputs dynamically, so everything is just laid out literally below. -->
         </li>
       </ul>
     </label>
-		<fm-input :cell="showCells[2]" />
+
+		<fm-input :cell="showCells[2]" @entered="updateForm('2','content', $event)" />
 
     <label class="phone">
     <span>{{showCells[3].label}}</span><br>
@@ -107,6 +108,7 @@ import SmallButton from './SmallButton'
 import DatePicker from 'vue2-datepicker'
 import matchSorter, {rankings, caseRankings} from 'match-sorter'
 import VenueStore from '../stores/VenueStore.js'
+import ShowCellsStore from '../stores/ShowCellsStore.js'
 import Modal from './Modal'
 
 export default {
@@ -114,17 +116,7 @@ export default {
 		return {
 			date: null,
 			userVenues: oldShows,
-			showCells: [
-				{type: 'date', content: '', label: 'Date'},
-				{type: 'text', content: '', label: 'Venue'},
-				{type: 'text', content: '', label: 'Description'},
-				{type: 'tel', content: '', label: 'Phone Number'},
-				{type: 'url', content: '', label: 'Website'},
-				{type: 'text', content: '', label: 'Display City'},
-				{type: 'text', content: '', label: 'Full Address'},
-				{type: 'number', content: '', label: 'Latitude'},
-				{type: 'number', content: '', label: 'Longitude'}
-			],
+			showCells: ShowCellsStore.state.showCells,
 			venueSearch: '',
 			willBeSelected: 0,
 			addressDetails: '',
@@ -317,7 +309,10 @@ export default {
 	  closeModal() {
 			this.isModalVisible = false
 			this.modalMessage = ''
-    }
+		},
+		updateForm(index, prop, content) {
+			ShowCellsStore.set(index, prop, content)
+		}
 	},
 	computed: {
 		possibleVenues() {
