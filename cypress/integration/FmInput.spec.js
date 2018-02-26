@@ -4,28 +4,18 @@ import showCells from '../fixtures/showCells.json' // should just use cy.fixture
 const mountVue = require('cypress-vue-unit-test')
 
 /* eslint-env mocha */
-describe('fm-input', () => {
-  beforeEach(mountVue(FmInput))
+console.log(showCells)
 
-  it('renders a label element', () => {
-    cy.get('label')
-  })
-  it('includes a span and input element', () => {
-    cy.get('label')
-      .get('span')
-      .get('input')
-  })
-})
-
-showCells.forEach(show => {
+showCells.forEach((show, index) => {
   const testType = show.type
   const testLabel = show.label
 
   describe(`"${testLabel}" fm-input (type: ${testType})`, () => {
-    const template = `<fm-input :cell="{type: '${testType}', content: '', label: '${testLabel}'}" />`
+    const template = `<fm-input :cell="${index}" />`
     const components = {
       FmInput: FmInput
     }
+
     // const methods = {
     //   testClick() {
     //     console.log('click')

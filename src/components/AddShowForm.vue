@@ -1,11 +1,4 @@
 <template>
-<!-- 
-A couple of things about this form. Autcomplete is off because user will be entering information about upcoming gigs, not their own personal info.
-We have a simplified form of autocomplete to fill data based on previous versions.
-
-I had planned to just have a v-for loop over the input elements, but vue does not like to set the type of
-inputs dynamically, so everything is just laid out literally below. -->
-
 
 <div class="wrapper">
     <modal
@@ -15,8 +8,8 @@ inputs dynamically, so everything is just laid out literally below. -->
 		<div slot="body">{{modalMessage}}</div>
 		</modal>
 <form autocomplete="off" @submit.prevent="onSubmit">
-		<fieldset>
-	    <span>{{showCells[0].label}}</span><br>
+		<label>
+	    <span>{{showCells[0].label}}</span>
 			<date-picker 
 				v-model="showCells[0].content" 
 				lang="en" 
@@ -24,9 +17,9 @@ inputs dynamically, so everything is just laid out literally below. -->
 				width="220"
 				@input="confirmDateExists"
 				></date-picker>
-		</fieldset>
+		</label>
     <label class="venue-name">
-    <span>{{showCells[1].label}}</span><br>
+    <span>{{showCells[1].label}}</span>
     <input
 			v-model="venueSearch" 
 			type="text" 
@@ -53,35 +46,15 @@ inputs dynamically, so everything is just laid out literally below. -->
       </ul>
     </label>
 
-		<fm-input :cell="showCells[2]" @entered="updateForm('2','content', $event)" />
+		<fm-input :cell="2" @entered="updateForm('2','content', $event)" /><!-- description -->
+		<fm-input :cell="3" @entered="updateForm('3','content', $event)" /><!-- phone -->
+		<fm-input :cell="4" @entered="updateForm('4','content', $event)" /><!-- website -->
+		<location-form-fields 
+			@entered="updateForm(...$event)" 
+			@changed="confirmTextExists($event)"
+			@geocode="geocode" /> <!-- location information -->
+      <span class="address-details">{{addressDetails}}</span>
 
-    <label class="phone">
-    <span>{{showCells[3].label}}</span><br>
-    <input v-model="showCells[3].content" type="tel"/>
-  </label>  
-    <label class="site">
-    <span>{{showCells[4].label}}</span><br>
-    <input v-model="showCells[4].content" type="url"/>
-  </label>  
-    <label class="display-city">
-    <span>{{showCells[5].label}}</span><br>
-    <input v-model="showCells[5].content" type="text"/>
-  </label>  
-    <label class="address">
-    <span>{{showCells[6].label}}</span><br>
-    <textarea v-model="showCells[6].content" @blur="geocode()" @change="confirmTextExists" rows="6"/>
-    <span class="address-details">{{addressDetails}}</span>
-  </label>  
-  <fieldset class="latlong">
-  	<label class="lat">
-    <span>{{showCells[7].label}}</span><br>
-    <input v-model="showCells[7].content" type="number" step="any"/>
-  	</label>  
-    <label class="long">
-    <span>{{showCells[8].label}}</span><br>
-    <input v-model="showCells[8].content" type="number" step="any"/>
-  	</label>
-  </fieldset>
 	<div>
 		<standard-button type="button" :onClick="resetVenueList" class="reset">Clear Form</standard-button> 
   	<standard-button type="submit" class="submit">Add Show</standard-button> 
@@ -102,6 +75,7 @@ inputs dynamically, so everything is just laid out literally below. -->
 <script>
 import firebase from 'firebase'
 import oldShows from '../assets/shows.json'
+import LocationFormFields from './LocationFormFields'
 import FmInput from './FmInput'
 import StandardButton from './StandardButton'
 import SmallButton from './SmallButton'
@@ -170,7 +144,8 @@ export default {
 				if (showCells[6].content !== ''){
 				this.geocode("at submit time")
 				} else {
-				this.addFormError('.address > textarea')
+				// this selector is currently pretty brittle
+				this.addFormError('textarea')
 					this.showModal("Show must have an address")	
 					return
 				}
@@ -330,6 +305,7 @@ export default {
 	},
 	components: {
 		FmInput,
+		LocationFormFields,
 		StandardButton,
 		SmallButton,
 		DatePicker,
@@ -342,13 +318,17 @@ export default {
 </script>
 
 <style scoped>
+span {
+	display: inline-block;
+	vertical-align: top;
+	margin-top: 10px;
+}
 form {    
 	padding-top: 4vw;
-	max-width: 600px;
-	display: grid;
-	grid-gap: 10px;
-	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 	margin: 0 auto;
+	text-align: right;
+	display: inline-block;
+	vertical-align: text-top;
 }
 
 fieldset {
@@ -365,7 +345,8 @@ textarea,
 .date-input {
 	padding: 10px;
 	font-size: 0.9em;
-	width: 100%;
+	width: 400px;
+	margin-top: 10px
 }
 
 textarea {
@@ -374,7 +355,7 @@ textarea {
 
 label {
 	display: block;
-	text-align: left;
+	text-align: right;
 }
 
 .address-details {
@@ -407,15 +388,18 @@ label {
 	background-color: #444;
 	color: #ccc;
 	box-sizing: border-box;
-	width: 207px;
+	width: 400px;
 	padding: 0px;
 	position: absolute;
-	transform: translate(0, -22px);
+	transform: translate(112px, -22px);
 	border-radius: 0;
 }
 
 li {
 	padding: 4px;
+}
+li:hover {
+	color: #fff;
 }
 
 .willBeSelected {

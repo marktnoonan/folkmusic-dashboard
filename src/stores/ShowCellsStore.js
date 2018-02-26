@@ -7,12 +7,13 @@ const ShowCellsStore = {
       { type: 'tel', content: '', label: 'Phone Number' },
       { type: 'url', content: '', label: 'Website' },
       { type: 'text', content: '', label: 'Display City' },
-      { type: 'text', content: '', label: 'Full Address' },
+      { type: 'textarea', content: '', label: 'Full Address' },
       { type: 'number', content: '', label: 'Latitude' },
       { type: 'number', content: '', label: 'Longitude' }
     ]
   },
   set(index, prop, payload) {
+    console.log(index, prop, payload)
     this.state.showCells[index][prop] = payload
   }
 }

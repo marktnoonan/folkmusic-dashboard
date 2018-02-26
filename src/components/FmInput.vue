@@ -1,69 +1,114 @@
 <template>
   <label>
     <!-- wrapping the whole thing in the label is good for accessibility -->
-    <span>{{cell.label}}</span> <br />
+    <span>{{cellData.label}}</span>
     <!-- we cannot dynamically assign types to form inputs in vue, so: -->
-    <input @input="input" v-model="content" v-if="isText" type="text" /> 
-    <input v-if="isUrl" type="url" /> 
-    <input v-if="isTel" type="tel" /> 
-    <input v-if="isNumber" type="number" />
-    <textarea v-if="isAddress" />
+    <input 
+      v-if="isText" 
+      type="text" 
+      input="input" 
+      v-model="cellData.content" 
+      autocomplete="off"
+      /> 
+    <input 
+      v-if="isUrl" 
+      type="url" 
+      input="input" 
+      v-model="cellData.content" 
+      autocomplete="off"
+      /> 
+    <input 
+      v-if="isTel" 
+      type="tel"
+      @input="input" 
+      v-model="cellData.content" 
+      autocomplete="off"
+      /> 
+    <input 
+      v-if="isNumber" 
+      type="number" 
+      @input="input" 
+      v-model="cellData.content" 
+      step="any"
+      autocomplete="off"
+      />
+    <textarea 
+      v-if="isTextarea" 
+      v-model="cellData.content" 
+      autocomplete="nope"
+      @input="input" 
+      @change="change"
+      @blur="geocode"
+      rows="6"
+      />
   </label>
 </template>
 
 <script>
-  import ShowCellsStore from '../stores/ShowCellsStore.js'
+import ShowCellsStore from '../stores/ShowCellsStore.js'
 
-  export default {
-    data() {
-      return {
-        content: ''
-      }
+export default {
+	data() {
+		return {
+			cellData: ShowCellsStore.state.showCells[this.cell]
+		}
+	},
+	methods: {
+		input() {
+			this.$emit('entered', this.cellData.content)
     },
-    methods: {
-      input (element) {
-        this.$emit('entered', this.content)
-      }
+    change(event) {
+      this.$emit('changed', event)
     },
-    props: {
-      cell: {
-        type: Object,
-        default: () => {
-          return {type: 'text', content: '', label: 'Default'}
-          } 
-      }
-    },
-    computed: {
-      isText: function() {
-        return this.cell.type === 'text'
-      },
-      isTel: function() {
-        return this.cell.type === 'tel'
-      },
-      isUrl: function() {
-        return this.cell.type === 'url'
-      },
-      isNumber: function() {
-        return this.cell.type === 'number'
-      },
-      isAddress: function() {
-        return this.cell.label === 'Address'
-      }      
+    geocode(){
+      this.$emit('geocode')
+    }
+	},
+	props: {
+		cell: {
+			default: ''
+    }
+  },
+	computed: {
+		isText: function() {
+			return this.cellData.type === 'text'
+		},
+		isTel: function() {
+			return this.cellData.type === 'tel'
+		},
+		isUrl: function() {
+			return this.cellData.type === 'url'
+		},
+		isNumber: function() {
+			return this.cellData.type === 'number'
+		},
+		isTextarea: function() {
+			return this.cellData.type === 'textarea'
     }
   }
+}
 </script>
 
 <style scoped>
+span {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 20px
+}
 input,
 textarea,
 .date-input {
 	padding: 10px;
 	font-size: 0.9em;
-	width: 100%;
+	width: 400px;
+  margin-top: 10px;
 }
 
 textarea {
-	resize: none
+	resize: none;
 }
 
+.form-error {
+	box-shadow: 0px 0px 2px 2px orangered;
+}
 </style>
