@@ -18,34 +18,13 @@
 				@input="confirmDateExists"
 				></date-picker>
 		</label>
-    <label class="venue-name">
-    <span>{{showCells[1].label}}</span>
-    <input
-			v-model="venueSearch" 
-			type="text" 
-			@keyup.down="increaseSelection" 
-			@keyup.up="decreaseSelection"
-		  @keyup.enter.prevent="confirmSelection"
-			@change="confirmTextExists"
-			id="venue-input"
-		/>
-    <ul id="venues" class="venue-ul">
-        <li 
-          v-for="(show, index) in possibleVenues"
-          v-if="showVenueList" 
-          :key="index" 
-          @click="populateVenueDetails(show)"
-          :class="{
-					'venue': true,
-					'willBeSelected': willBeSelected === index
-					}"
-				>					
-					<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-repeat"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
-			 		 {{show.Venue}}
-        </li>
-      </ul>
-    </label>
-
+		
+		<venue-picker 
+			@entered="updateVenueSearch($event)" 
+			@changed="confirmTextExists($event)" 
+			@populate="populateVenueDetails($event)"
+			:venueSearch="venueSearch"
+			/>
 		<fm-input :cell="2" @entered="updateForm('2','content', $event)" /><!-- description -->
 		<fm-input :cell="3" @entered="updateForm('3','content', $event)" /><!-- phone -->
 		<fm-input :cell="4" @entered="updateForm('4','content', $event)" /><!-- website -->
@@ -75,12 +54,12 @@
 <script>
 import firebase from 'firebase'
 import oldShows from '../assets/shows.json'
+import VenuePicker from './VenuePicker'
 import LocationFormFields from './LocationFormFields'
 import FmInput from './FmInput'
 import StandardButton from './StandardButton'
 import SmallButton from './SmallButton'
 import DatePicker from 'vue2-datepicker'
-import matchSorter, {rankings, caseRankings} from 'match-sorter'
 import VenueStore from '../stores/VenueStore.js'
 import ShowCellsStore from '../stores/ShowCellsStore.js'
 import Modal from './Modal'
@@ -89,16 +68,13 @@ export default {
 	data() {
 		return {
 			date: null,
-			userVenues: oldShows,
 			showCells: ShowCellsStore.state.showCells,
-			venueSearch: '',
-			willBeSelected: 0,
 			addressDetails: '',
-			showVenueList: true,
 			messageAfterSubmit: '',
 			showsAddedThisSession: [],
 			isModalVisible: false,
-			modalMessage: ''
+			modalMessage: '',
+			venueSearch: ''
 		}
 	},
 	props: {},
@@ -106,8 +82,8 @@ export default {
 	},
 	methods: {
 		populateVenueDetails(show) {
-			this.venueSearch = show.Venue
-			// adjusting for labels clearer in the UI than they are in the Google Sheet
+			console.log("i've been called")
+			this.venueSearch = show.Venue			// adjusting for labels clearer in the UI than they are in the Google Sheet
 			this.showCells.forEach(cell => {
 				if (cell.label !== 'Date' && cell.label !== 'Website') {
 					if (cell.label === 'Display City') {
@@ -119,7 +95,6 @@ export default {
 					}
 				}
 			})
-			this.showVenueList = false
 		},
 		onSubmit() {
 			document.querySelector('.submit').blur()			
@@ -250,23 +225,6 @@ export default {
 					}
 				)
 		},
-		increaseSelection() {
-			if (this.venueSearch.length){
-				if (this.willBeSelected < this.possibleVenues.length - 1){
-						this.willBeSelected++
-				}
-			}			
-		},
-		decreaseSelection() {
-		if (this.venueSearch.length){
-				if (this.willBeSelected > 0){
-						this.willBeSelected--
-				}
-			}
-		},
-		confirmSelection(event) {
-			this.populateVenueDetails(this.possibleVenues[this.willBeSelected])
-		},
 		confirmTextExists(event) {
 			if (event.path[0].value.length > 0) {
 				event.path[0].classList.remove('form-error')
@@ -287,20 +245,11 @@ export default {
 		},
 		updateForm(index, prop, content) {
 			ShowCellsStore.set(index, prop, content)
-		}
-	},
-	computed: {
-		possibleVenues() {
-			if (this.venueSearch.length){
-				return matchSorter(
-					this.userVenues, 
-					this.venueSearch, 
-					{
-						keys: [(venue) => venue.Venue],
-						threshold: matchSorter.rankings.WORD_STARTS_WITH
-						}
-					)
-			}
+		},
+		updateVenueSearch(search){
+			console.log("update venue search called")
+			this.venueSearch = search
+			this.showCells[1].content = search
 		}
 	},
 	components: {
@@ -308,11 +257,9 @@ export default {
 		LocationFormFields,
 		StandardButton,
 		SmallButton,
+		VenuePicker,
 		DatePicker,
 		Modal
-	},
-	mounted() {
-		VenueStore.methods.getUserVenues(this, "userVenues")
 	}
 }
 </script>
@@ -364,46 +311,12 @@ label {
 	margin-bottom: 10px;
 }
 
-.venue {
-	cursor: pointer;
-	font-weight: bold;
-}
-
-.selected-venue {
-	background-color: yellowgreen;
-}
-
 .submit {
 	background-color: rgb(161, 191, 121);
 }
 
 .reset {
 	background-color: rgb(225, 134, 134);
-}
-
-.venue-ul {
-	list-style-type: none;
-	text-align: left;
-	display: block;
-	background-color: #444;
-	color: #ccc;
-	box-sizing: border-box;
-	width: 400px;
-	padding: 0px;
-	position: absolute;
-	transform: translate(112px, -22px);
-	border-radius: 0;
-}
-
-li {
-	padding: 4px;
-}
-li:hover {
-	color: #fff;
-}
-
-.willBeSelected {
-	color: #fff;
 }
 
 h3 {

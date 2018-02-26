@@ -1,3 +1,4 @@
+
 const ShowCellsStore = {
   state: {
     showCells: [
@@ -13,7 +14,6 @@ const ShowCellsStore = {
     ]
   },
   set(index, prop, payload) {
-    console.log(index, prop, payload)
     this.state.showCells[index][prop] = payload
   }
 }

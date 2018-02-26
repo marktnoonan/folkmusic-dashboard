@@ -19,7 +19,7 @@ const VenueStore = {
             if (snap.val() !== null) {
               const vals = snap.val()
               if (vm) {
-                //weirdness here sometimes
+                //weirdness here sometimes so let's initialize an empty array
               vm[targetProp] = []                
               
               vals.forEach((val, i) => {
