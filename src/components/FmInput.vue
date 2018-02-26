@@ -40,7 +40,7 @@
       @input="input" 
       @change="change"
       @blur="geocode"
-      rows="6"
+      rows="3"
       />
   </label>
 </template>
@@ -101,12 +101,11 @@ export default {
 span {
   display: inline-block;
   vertical-align: top;
-  margin-top: 20px
+  margin-top: 14px
 }
 input,
-textarea,
-.date-input {
-	padding: 10px;
+textarea {
+	padding: 4px;
 	font-size: 0.9em;
 	width: 400px;
   margin-top: 10px;

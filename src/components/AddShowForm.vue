@@ -2,7 +2,7 @@
 
 <div class="wrapper">
 	<form autocomplete="off" @submit.prevent="onSubmit">
-		<label>
+		<label class="date-picker-container">
 	    <span>{{showCells[0].label}}</span>
 			<date-picker 
 				v-model="showCells[0].content" 
@@ -38,7 +38,7 @@
 	</div>
 
 </form>
-	<div><br>
+	<div class="shows-added-container"><br>
 		<h3>Shows Added</h3>
 		<ul class="shows-added-list">
 			<li v-for="(show, index) in showsAddedThisSession" :key="show[0]+index">{{show[0]}} - {{show[1]}}, {{show[5]}}</li>
@@ -177,7 +177,7 @@ export default {
 						instance.messageAfterSubmit = 'Show saved!'
 						setTimeout(() => instance.messageAfterSubmit = '', 2000)
 						instance.resetVenueList()
-						instance.showsAddedThisSession.unshift(rowContent)
+						instance.showsAddedThisSession.push(rowContent)
 					}
 				})
 				archiveRef.push(rowContent)
@@ -207,11 +207,15 @@ export default {
 							this.showCells[7].content = location.geometry.lat
 							this.showCells[8].content = location.geometry.lng
 							
-							if (this.showCells[5].content === '') {
-								console.log(location.components)
-								this.showCells[5].content = `${location.components.city}, ${location.components.state_code}`
+							console.log(location.components)
+							if (location.components.city){
+								this.showCells[5].content = `${location.components.city}, ${location.components.state_code}`								
+							} else if (location.components.town) {
+								this.showCells[5].content = `${location.components.town}, ${location.components.state_code}`																	
+							} else {
+								this.showCells[5].content = `${location.components.county}, ${location.components.state_code}`																									
 							}
-							
+						
 							if (when === "at submit time") {
 								this.saveShow()
 							}
@@ -271,13 +275,22 @@ export default {
 </script>
 
 <style scoped>
+.date-picker-container {
+  text-align: left;
+  transform: translateX(75px);
+}
+
+.shows-added-container {
+	display: inline-block;
+}
+
 span {
 	display: inline-block;
 	vertical-align: top;
-	margin-top: 10px;
+	margin-top: 4px;
 }
 form {    
-	padding-top: 4vw;
+	padding-top: 3vw;
 	margin: 0 auto;
 	text-align: right;
 	display: inline-block;
@@ -291,19 +304,6 @@ fieldset {
 
 .geocode {
 	margin-top: 10px;
-}
-
-input,
-textarea,
-.date-input {
-	padding: 10px;
-	font-size: 0.9em;
-	width: 400px;
-	margin-top: 10px
-}
-
-textarea {
-	resize: none
 }
 
 label {

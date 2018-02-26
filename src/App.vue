@@ -22,7 +22,7 @@ export default {
 }
 .date-input {
   width: 100%;
-  padding: 10px;
+  padding: 4px;
   font-size: 1em;
   color: #000;
   border: 1px solid #575757;
@@ -33,10 +33,10 @@ export default {
 
 * {
   box-sizing: border-box;
-  border-radius: 6px;
+  border-radius: 3px;
 }
 
-input {
+input, textarea {
     border: 1px solid #575757;
 }
 

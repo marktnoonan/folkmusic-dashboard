@@ -108,10 +108,10 @@ export default {
 span {
   display: inline-block;
   vertical-align: top;
-  margin-top: 20px
+  margin-top: 12px
 }
 input {
-	padding: 10px;
+	padding: 3px;
 	font-size: 0.9em;
 	width: 400px;
   margin-top: 10px;

@@ -1,12 +1,12 @@
 <template>
   <div class="address-component">
-		<fm-input :cell="5" @entered="updateForm('5','content', $event)" /><!-- display city -->
     <fm-input class="address"
       :cell="6" 
       @entered="updateForm('6','content', $event)"
       @changed="confirmTextExists"
       @geocode="geocode" 
       /> 
+		<fm-input :cell="5" @entered="updateForm('5','content', $event)" /><!-- display city -->  
   <fieldset class="latlong">
     <fm-input class="lat" :cell="7" @entered="updateForm('7','content', $event)" />
     <fm-input class="lat" :cell="8" @entered="updateForm('8','content', $event)" />
@@ -53,7 +53,7 @@ fieldset {
 
 input,
 textarea {
-	padding: 10px;
+	padding: 3px;
 	font-size: 0.9em;
 	width: 100%;
 }
