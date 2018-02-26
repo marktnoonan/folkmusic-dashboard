@@ -1,13 +1,7 @@
 <template>
 
 <div class="wrapper">
-    <modal
-      v-show="isModalVisible"
-      @close="closeModal"
-    >
-		<div slot="body">{{modalMessage}}</div>
-		</modal>
-<form autocomplete="off" @submit.prevent="onSubmit">
+	<form autocomplete="off" @submit.prevent="onSubmit">
 		<label>
 	    <span>{{showCells[0].label}}</span>
 			<date-picker 
@@ -24,15 +18,19 @@
 			@changed="confirmTextExists($event)" 
 			@populate="populateVenueDetails($event)"
 			:venueSearch="venueSearch"
+			:formReset="formReset"
 			/>
+
 		<fm-input :cell="2" @entered="updateForm('2','content', $event)" /><!-- description -->
 		<fm-input :cell="3" @entered="updateForm('3','content', $event)" /><!-- phone -->
 		<fm-input :cell="4" @entered="updateForm('4','content', $event)" /><!-- website -->
+
 		<location-form-fields 
 			@entered="updateForm(...$event)" 
 			@changed="confirmTextExists($event)"
 			@geocode="geocode" /> <!-- location information -->
-      <span class="address-details">{{addressDetails}}</span>
+  	
+		<span class="address-details">{{addressDetails}}</span>
 
 	<div>
 		<standard-button type="button" :onClick="resetVenueList" class="reset">Clear Form</standard-button> 
@@ -47,6 +45,12 @@
 		</ul>
 		
 	</div>
+	<modal
+		v-show="isModalVisible"
+		@close="closeModal"
+	>
+		<div slot="body">{{modalMessage}}</div>
+	</modal>
 </div>
 
 </template>
@@ -74,7 +78,8 @@ export default {
 			showsAddedThisSession: [],
 			isModalVisible: false,
 			modalMessage: '',
-			venueSearch: ''
+			venueSearch: '',
+			formReset: false
 		}
 	},
 	props: {},
@@ -82,7 +87,7 @@ export default {
 	},
 	methods: {
 		populateVenueDetails(show) {
-			console.log("i've been called")
+			console.log("Populate venue details, i've been called")
 			this.venueSearch = show.Venue			// adjusting for labels clearer in the UI than they are in the Google Sheet
 			this.showCells.forEach(cell => {
 				if (cell.label !== 'Date' && cell.label !== 'Website') {
@@ -178,7 +183,8 @@ export default {
 				archiveRef.push(rowContent)
 		},
 		resetVenueList() {
-			this.showVenueList = true
+			// formReset is just a trigger that can be watched by child components, so they know that a reset is happening
+			this.formReset = !this.formReset
 			this.venueSearch = ''
 			this.willBeSelected = 0
 			this.addressDetails = ''

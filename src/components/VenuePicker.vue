@@ -43,10 +43,15 @@ export default {
       content: this.venueSearch
     }    
   },
-  props: ['venueSearch'],
+  props: ['venueSearch', 'formReset'],
   watch: {
     venueSearch: function () {
       this.content = this.venueSearch
+    },
+    formReset: function () {
+      console.log("formReset happening")  
+      this.willBeSelected = 0
+      this.showVenueList = true
     }
   },
   methods: {

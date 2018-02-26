@@ -13,7 +13,8 @@
     <input 
       v-if="isUrl" 
       type="url" 
-      input="input" 
+      @input="input" 
+      @change="checkUrlProtocol"
       v-model="cellData.content" 
       autocomplete="off"
       /> 
@@ -62,6 +63,13 @@ export default {
     },
     geocode(){
       this.$emit('geocode')
+    },
+    checkUrlProtocol () {
+      const url = this.cellData.content
+      const protocolRegEx = new RegExp('^(?:[a-z]+:)?//', 'i')
+      if (!protocolRegEx.test(url)) {
+        this.cellData.content = "http://" + url
+      }
     }
 	},
 	props: {
