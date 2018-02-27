@@ -2,16 +2,18 @@
 
 <div class="wrapper">
 	<form autocomplete="off" @submit.prevent="onSubmit">
-		<label class="date-picker-container">
+		<div class="date-picker-container">
+			<!-- this should really be a label, but that was causing unwanted behavior
+			in the date-picker component. Not sure what the interaction is. -->
 	    <span>{{showCells[0].label}}</span>
 			<date-picker 
 				v-model="showCells[0].content" 
 				lang="en" 
 				input-class="date-input"
-				width="220"
+				width="400"
 				@input="confirmDateExists"
 				></date-picker>
-		</label>
+		</div>
 		
 		<venue-picker 
 			@entered="updateVenueSearch($event)" 
@@ -275,10 +277,6 @@ export default {
 </script>
 
 <style scoped>
-.date-picker-container {
-  text-align: left;
-  transform: translateX(75px);
-}
 
 .shows-added-container {
 	display: inline-block;
@@ -290,7 +288,6 @@ span {
 	margin-top: 4px;
 }
 form {    
-	padding-top: 3vw;
 	margin: 0 auto;
 	text-align: right;
 	display: inline-block;

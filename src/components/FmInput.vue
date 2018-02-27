@@ -68,6 +68,7 @@ export default {
       const url = this.cellData.content
       const protocolRegEx = new RegExp('^(?:[a-z]+:)?//', 'i')
       if (!protocolRegEx.test(url)) {
+        // if there is no protocol, default to http://
         this.cellData.content = "http://" + url
       }
     }
