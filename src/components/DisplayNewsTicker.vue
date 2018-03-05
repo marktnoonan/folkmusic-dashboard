@@ -34,27 +34,32 @@ export default {
 		}
 	},
 	mounted() {
-		const tickerRef = firebase.database().ref("news-ticker-items")
+		const tickerRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/news-ticker-items')
 		this.tickerRef = tickerRef
-		let instance = this
+		let vm = this
 		tickerRef.on("value", function(snap) {
-			instance.tickerItems = snap.val()
+			vm.tickerItems = snap.val()
 		})
 		setInterval(function() {
-			if (instance.displayingNow < instance.tickerItems.length - 1) {
-				instance.displayingNow++
+			if (vm.displayingNow < vm.tickerItems.length - 1) {
+				vm.displayingNow++
 			} else {
-				instance.firstCycleCompleted = true
-				instance.displayingNow = 0
+				vm.firstCycleCompleted = true
+				vm.displayingNow = 0
 			}
 		}, 3500)
 	},
 	computed: {
 		longestItem() {
-			let tempItems = [...this.tickerItems]
-			return tempItems.sort(function(a, b) {
-				return b.text.length - a.text.length
-			})[0]
+			// check that the array has been populated from the database,
+			// then sort it by length and return the first item in the 
+			// sorted array
+			if (this.tickerItems){
+				let tempItems = [...this.tickerItems]
+				return tempItems.sort(function(a, b) {
+					return b.text.length - a.text.length
+				})[0]
+			}
 		}
 	}
 }

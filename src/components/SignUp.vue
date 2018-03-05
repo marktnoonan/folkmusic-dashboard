@@ -22,9 +22,10 @@
     },
     methods: {
       signUp(){
+        const vm = this
         firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(
           function(user) {
-            this.$router.replace('dashboard')  
+            vm.$router.replace('dashboard')  
           }, function(err) {
             alert("a screwup of some kind took place")
           }

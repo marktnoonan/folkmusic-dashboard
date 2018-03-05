@@ -44,9 +44,9 @@ export default {
 			this.tickerItems.splice(index, 1)
 		},
 		undoChanges() {
-			let instance = this
+			let vm = this
 			this.tickerRef.once("value").then(function(snap) {
-				instance.tickerItems = snap.val()
+				vm.tickerItems = snap.val()
 			})
 		}
 	},
@@ -55,10 +55,21 @@ export default {
 		DisplayNewsTicker
 	},
 	mounted() {
-		this.tickerRef = firebase.database().ref("news-ticker-items")
-		let instance = this
+
+		this.tickerRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/news-ticker-items')
+		
+		let vm = this
 		this.tickerRef.once("value").then(function(snap) {
-			instance.tickerItems = snap.val()
+			if (snap.val()){
+						vm.tickerItems = snap.val()
+			}	else {
+			firebase.database().ref('news-ticker-defaults').once('value').then(
+				function(defaultSnap){
+					vm.tickerRef.set(defaultSnap.val())
+				}
+			)
+			}
+
 		})
 	}
 }

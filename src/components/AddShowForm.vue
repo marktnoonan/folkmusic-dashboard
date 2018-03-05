@@ -40,12 +40,13 @@
 	</div>
 
 </form>
-	<div class="shows-added-container"><br>
+	<div class="shows-added-container">
 		<h3>Shows Added</h3>
-		<ul class="shows-added-list">
-			<li v-for="(show, index) in showsAddedThisSession" :key="show[0]+index">{{show[0]}} - {{show[1]}}, {{show[5]}}</li>
-		</ul>
-		
+		<!-- <ul class="shows-added-list"> -->
+			<!-- <li v-for="(show, index) in showsAddedThisSession" :key="show[0]+index">{{show[0]}} - {{show[1]}}, {{show[5]}}</li> -->
+		<!-- </ul> -->
+		<gig-listing v-for="(show, index) in showsAddedThisSession" :key="show[0]+index" :show="show"/>
+		<!-- <gig-listing /> -->
 	</div>
 	<modal
 		v-show="isModalVisible"
@@ -61,6 +62,7 @@
 import firebase from 'firebase'
 import oldShows from '../assets/shows.json'
 import VenuePicker from './VenuePicker'
+import GigListing from './GigListing'
 import LocationFormFields from './LocationFormFields'
 import FmInput from './FmInput'
 import StandardButton from './StandardButton'
@@ -167,7 +169,7 @@ export default {
 					date.getDate()
 
 				const showRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/showsToAdd')
-				const archiveRef = firebase.database().ref('formSubmissions')
+				const archiveRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/formSubmissions')
 
 				let instance = this
 				showRef.push(rowContent, function(error) {
@@ -271,6 +273,7 @@ export default {
 		SmallButton,
 		VenuePicker,
 		DatePicker,
+		GigListing,
 		Modal
 	}
 }
@@ -279,7 +282,9 @@ export default {
 <style scoped>
 
 .shows-added-container {
+	position: absolute;
 	display: inline-block;
+	width: 400px;
 }
 
 span {
