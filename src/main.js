@@ -24,8 +24,13 @@ firebase.auth().onAuthStateChanged(function (user) {
 			components: {App}
 		})
 	}
-		if (user) {
-			UserStore.set('username', user.email)
+	if (user) {
+		firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/name').once(
+			'value', function (nameSnap) {
+				// if they set a name when signing up, we can greet them with it,
+				// otherwise, we use their email address.
+				UserStore.set('username', (nameSnap.val() || user.email))
+			})
 		}
 		if (!user) {
 			UserStore.set('username', 'old person is gone now')
