@@ -10,6 +10,7 @@ import NewsTicker from '@/components/NewsTicker'
 import DisplayNewsTicker from '@/components/DisplayNewsTicker'
 import Venues from '@/components/Venues'
 import Welcome from '@/components/Welcome'
+import PublicGigViewer from '@/components/PublicGigViewer'
 
 import firebase from 'firebase'
 
@@ -19,58 +20,62 @@ Vue.use(Router)
 let router = new Router({
   routes: [
     {
-      path: "/dashboard",
-      redirect: "/dashboard/welcome",
-      name: "Dashboard",
+      path: '/dashboard',
+      redirect: '/dashboard/welcome',
+      name: 'Dashboard',
       component: Dashboard,
       meta: {
         requiresAuth: true
       },
       children: [
         {
-          path: "add-show",
-          name: "Add a Show",
+          path: 'add-show',
+          name: 'Add a Show',
           component: AddShowForm
         },
         {
-          path: "news-ticker",
-          name: "Edit News Ticker",
+          path: 'news-ticker',
+          name: 'Edit News Ticker',
           component: NewsTicker
         },
         {
-          path: "display-news-ticker",
-          name: "Display News Ticker",
+          path: 'display-news-ticker',
+          name: 'Display News Ticker',
           component: DisplayNewsTicker
         },
         {
-          path: "venues",
-          name: "Venues",
+          path: 'venues',
+          name: 'Venues',
           component: Venues
         },
         {
-        	path: "welcome",
-        	name: "Welcome",
-        	component: Welcome
+          path: 'welcome',
+          name: 'Welcome',
+          component: Welcome
         }
-
       ]
     },
     {
-      path: "/login",
-      name: "Login",
+      path: '/login',
+      name: 'Login',
       component: Login
     },
     {
-      path: "/sign-up",
-      name: "SignUp",
+      path: '/sign-up',
+      name: 'SignUp',
       component: SignUp
     },
     {
-      path: "/*",
-      redirect: "/login"
+      path: '/public/:publicID',
+      name: 'PublicGigViewer',
+      component: PublicGigViewer
+    },
+    {
+      path: '/*',
+      redirect: '/login'
     }
   ]
-});
+})
 
 router.beforeEach((to, from, next) => {
   let currentUser = firebase.auth().currentUser
