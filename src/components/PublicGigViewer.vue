@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="root">
     <h2> News </h2>
     <display-news-ticker />
     <h2>Shows</h2>
@@ -50,5 +50,8 @@ import DisplayNewsTicker from './DisplayNewsTicker'
 </script>
 
 <style scoped>
-
+  #root {
+    max-width: 600px;
+    margin: auto;
+  }
 </style>

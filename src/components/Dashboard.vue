@@ -63,7 +63,7 @@ export default {
 	computed: {
 		publicURL () {
 			if (this.publicID) {
-				return "https://markthomasnoonan.com/folkmusic-dashboard/public/" + this.publicID
+				return "https://markthomasnoonan.com/folkmusic-dashboard/#/public/" + this.publicID
 			}
 		}
 	},

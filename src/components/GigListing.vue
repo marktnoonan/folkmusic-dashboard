@@ -111,7 +111,7 @@
     font-weight: bold;
     border: 0;
     padding: 10px 15px;
-    display: inline-block;
+    float: right;
     margin: 2px;
     background-color: #4B3849;
     font-size: 11px;

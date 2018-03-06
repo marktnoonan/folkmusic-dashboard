@@ -13,3 +13,4 @@ src/firebase-config.js
 *.ntvs*
 *.njsproj
 *.sln
+dist.zip
