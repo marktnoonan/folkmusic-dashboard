@@ -46,83 +46,83 @@
 </template>
 
 <script>
-import ShowCellsStore from '../stores/ShowCellsStore.js'
+import ShowCellsStore from "../stores/ShowCellsStore.js";
 
 export default {
-	data() {
-		return {
-			cellData: ShowCellsStore.state.showCells[this.cell]
-		}
-	},
-	methods: {
-		input() {
-			this.$emit('entered', this.cellData.content)
+  data() {
+    return {
+      cellData: ShowCellsStore.state.showCells[this.cell]
+    };
+  },
+  methods: {
+    input() {
+      this.$emit("entered", this.cellData.content);
     },
     change(event) {
-      this.$emit('changed', event)
+      this.$emit("changed", event);
     },
-    geocode(){
-      this.$emit('geocode')
+    geocode() {
+      this.$emit("geocode");
     },
-    checkUrlProtocol () {
-      const url = this.cellData.content
-      const protocolRegEx = new RegExp('^(?:[a-z]+:)?//', 'i')
+    checkUrlProtocol() {
+      const url = this.cellData.content;
+      const protocolRegEx = new RegExp("^(?:[a-z]+:)?//", "i");
       if (!protocolRegEx.test(url)) {
         // if there is no protocol, default to http://
-        this.cellData.content = "http://" + url
+        this.cellData.content = "http://" + url;
       }
     }
-	},
-	props: {
-		cell: {
-			default: ''
+  },
+  props: {
+    cell: {
+      default: ""
     }
   },
-	computed: {
-		isText: function() {
-			return this.cellData.type === 'text'
-		},
-		isTel: function() {
-			return this.cellData.type === 'tel'
-		},
-		isUrl: function() {
-			return this.cellData.type === 'url'
-		},
-		isNumber: function() {
-			return this.cellData.type === 'number'
-		},
-		isTextarea: function() {
-			return this.cellData.type === 'textarea'
+  computed: {
+    isText: function() {
+      return this.cellData.type === "text";
+    },
+    isTel: function() {
+      return this.cellData.type === "tel";
+    },
+    isUrl: function() {
+      return this.cellData.type === "url";
+    },
+    isNumber: function() {
+      return this.cellData.type === "number";
+    },
+    isTextarea: function() {
+      return this.cellData.type === "textarea";
     }
   }
-}
+};
 </script>
 
 <style scoped>
 span {
   display: inline-block;
   vertical-align: top;
-  margin-top: 14px
+  margin-top: 14px;
 }
 input,
 textarea {
-	padding: 4px;
-	font-size: 0.9em;
-	width: 400px;
+  padding: 4px;
+  font-size: 0.9em;
+  width: 400px;
   margin-top: 10px;
 }
 
 textarea {
-	resize: none;
+  resize: none;
 }
 
 .form-error {
-	box-shadow: 0px 0px 2px 2px orangered;
+  box-shadow: 0px 0px 2px 2px orangered;
 }
-@media (max-width:530px) {
-	span {
-		display: block !important; 
-	}
+@media (max-width: 530px) {
+  span {
+    display: block !important;
+  }
   input,
   textarea {
     width: 100%;
@@ -132,6 +132,4 @@ textarea {
     text-align: left;
   }
 }
-
-
 </style>

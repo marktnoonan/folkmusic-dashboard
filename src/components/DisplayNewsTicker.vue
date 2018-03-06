@@ -23,102 +23,103 @@
 </template>
 
 <script>
-import firebase from "firebase"
+import firebase from "firebase";
 
 export default {
-	data() {
-		return {
-			tickerItems: [],
-			displayingNow: 0,
-			firstCycleCompleted: false
-		}
-	},
-	mounted() {
-		const tickerRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/news-ticker-items')
-		this.tickerRef = tickerRef
-		let vm = this
-		tickerRef.on("value", function(snap) {
-			vm.tickerItems = snap.val()
-		})
-		setInterval(function() {
-			if (vm.displayingNow < vm.tickerItems.length - 1) {
-				vm.displayingNow++
-			} else {
-				vm.firstCycleCompleted = true
-				vm.displayingNow = 0
-			}
-		}, 3500)
-	},
-	computed: {
-		longestItem() {
-			// check that the array has been populated from the database,
-			// then sort it by length and return the first item in the 
-			// sorted array. This not 100% bulletproof because spacing 
-			// and character width can cause a longer string to not generate newlines
-			// where a shorter string does.
-			if (this.tickerItems){
-				let tempItems = [...this.tickerItems]
-				return tempItems.sort(function(a, b) {
-					return b.text.length - a.text.length
-				})[0]
-			}
-		}
-	}
-}
+  data() {
+    return {
+      tickerItems: [],
+      displayingNow: 0,
+      firstCycleCompleted: false
+    };
+  },
+  mounted() {
+    const tickerRef = firebase
+      .database()
+      .ref("users/" + firebase.auth().currentUser.uid + "/news-ticker-items");
+    this.tickerRef = tickerRef;
+    let vm = this;
+    tickerRef.on("value", function(snap) {
+      vm.tickerItems = snap.val();
+    });
+    setInterval(function() {
+      if (vm.displayingNow < vm.tickerItems.length - 1) {
+        vm.displayingNow++;
+      } else {
+        vm.firstCycleCompleted = true;
+        vm.displayingNow = 0;
+      }
+    }, 3500);
+  },
+  computed: {
+    longestItem() {
+      // check that the array has been populated from the database,
+      // then sort it by length and return the first item in the
+      // sorted array. This not 100% bulletproof because spacing
+      // and character width can cause a longer string to not generate newlines
+      // where a shorter string does.
+      if (this.tickerItems) {
+        let tempItems = [...this.tickerItems];
+        return tempItems.sort(function(a, b) {
+          return b.text.length - a.text.length;
+        })[0];
+      }
+    }
+  }
+};
 </script>
 
 <style scoped>
-
 .ticker-wrapper {
-	resize: horizontal;
-	border-top: 1px solid #aaa;
-	border-bottom: 1px solid #aaa;	
-	border-radius: 10px;
-	background: linear-gradient(
-		to bottom,
-		rgba(0, 0, 0, 0.12) 0%,
-		rgba(0, 0, 0, 0.03) 80%
-	);
-	position: relative;
-	padding-top: 10px;
-	text-align: center;
-	overflow: hidden;
-	margin: 0 auto;
-	max-width: 750px;
-	z-index: 1000;
+  resize: horizontal;
+  border-top: 1px solid #aaa;
+  border-bottom: 1px solid #aaa;
+  border-radius: 10px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.12) 0%,
+    rgba(0, 0, 0, 0.03) 80%
+  );
+  position: relative;
+  padding-top: 10px;
+  text-align: center;
+  overflow: hidden;
+  margin: 0 auto;
+  max-width: 750px;
+  z-index: 1000;
 }
 
 .ticker-item {
-	box-sizing: border-box;
-	display: block;
-	font-weight: bold;
-	position: absolute;
-	text-align: center;
-	padding: 6px;
-	width: 100%;
-	opacity: 0;
-	top: 6px;
-	pointer-events: none
+  box-sizing: border-box;
+  display: block;
+  font-weight: bold;
+  position: absolute;
+  text-align: center;
+  padding: 6px;
+  width: 100%;
+  opacity: 0;
+  top: 6px;
+  pointer-events: none;
 }
 
 .ticker-size-guide {
-	visibility: hidden;
-	padding: 6px;
-	font-weight: bold;
-	pointer-events: none;
+  visibility: hidden;
+  padding: 6px;
+  font-weight: bold;
+  pointer-events: none;
 }
 
 .active-ticker-item {
-	opacity: 1;
-	-webkit-animation: slide-in-bottom 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)
-		both;
-	animation: slide-in-bottom 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  opacity: 1;
+  -webkit-animation: slide-in-bottom 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    both;
+  animation: slide-in-bottom 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
 .leaving-ticker-item {
-	-webkit-animation: slide-out-top 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53)
-		both;
-	animation: slide-out-top 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+  -webkit-animation: slide-out-top 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53)
+    both;
+  animation: slide-out-top 0.8s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
 }
 
 /* ----------------------------------------------
@@ -132,28 +133,28 @@ export default {
  * ----------------------------------------
  */
 @-webkit-keyframes slide-out-top {
-	0% {
-		-webkit-transform: translateY(0);
-		transform: translateY(0);
-		opacity: 1;
-	}
-	100% {
-		-webkit-transform: translateY(-500px);
-		transform: translateY(-500px);
-		opacity: 0;
-	}
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateY(-500px);
+    transform: translateY(-500px);
+    opacity: 0;
+  }
 }
 @keyframes slide-out-top {
-	0% {
-		-webkit-transform: translateY(0);
-		transform: translateY(0);
-		opacity: 1;
-	}
-	100% {
-		-webkit-transform: translateY(-500px);
-		transform: translateY(-500px);
-		opacity: 0;
-	}
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    -webkit-transform: translateY(-500px);
+    transform: translateY(-500px);
+    opacity: 0;
+  }
 }
 
 /**
@@ -163,27 +164,27 @@ export default {
  */
 
 @-webkit-keyframes slide-in-bottom {
-	0% {
-		-webkit-transform: translateY(100px);
-		transform: translateY(100px);
-		opacity: 0;
-	}
-	100% {
-		-webkit-transform: translateY(0);
-		transform: translateY(0);
-		opacity: 1;
-	}
+  0% {
+    -webkit-transform: translateY(100px);
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 @keyframes slide-in-bottom {
-	0% {
-		-webkit-transform: translateY(100px);
-		transform: translateY(100px);
-		opacity: 0;
-	}
-	100% {
-		-webkit-transform: translateY(0);
-		transform: translateY(0);
-		opacity: 1;
-	}
+  0% {
+    -webkit-transform: translateY(100px);
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 </style>

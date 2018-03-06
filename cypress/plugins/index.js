@@ -14,14 +14,18 @@
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
-
-}
+};
 
 const {
   onFilePreprocessor
-} = require('cypress-vue-unit-test/preprocessor/webpack')
+} = require("cypress-vue-unit-test/preprocessor/webpack");
 module.exports = on => {
-  on('file:preprocessor', onFilePreprocessor('/Applications/MAMP/htdocs/folkmusic-dashboard/build/webpack.base.conf.js'))
-}
+  on(
+    "file:preprocessor",
+    onFilePreprocessor(
+      "/Applications/MAMP/htdocs/folkmusic-dashboard/build/webpack.base.conf.js"
+    )
+  );
+};
 
 //

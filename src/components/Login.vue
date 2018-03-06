@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <h3>Sign In</h3>
+    <h2>Log In</h2>
 
     <input autocomplete="off" type="text" v-model="email" placeholder="Email"><br>
     <input autocomplete="off" type="password" v-model="password" placeholder="Password" @keyup.enter="login"><br>
@@ -11,48 +11,51 @@
 </template>
 
 <script>
+import firebase from "firebase";
+import StandardButton from "./StandardButton";
 
-  import firebase from 'firebase'
-  import StandardButton from './StandardButton'
+export default {
+  name: "login",
+  data: function() {
+    return {
+      email: "",
+      password: "",
+      messageToUser: ""
+    };
+  },
+  methods: {
+    login: function() {
+      if (this.email && this.password) {
+        firebase
+          .auth()
+          .signInWithEmailAndPassword(this.email, this.password)
+          .then(
+            user => {
+              this.$router.replace("dashboard/welcome");
+            },
+            err => {
+              console.log(err);
 
-  export default {
-    name: "login",
-    data: function () {
-      return {
-        email: '',
-        password: '',
-        messageToUser: ''
+              this.messageToUser = "Login failed: " + err.message;
+            }
+          );
+      } else {
+        console.log("nothing entered");
       }
-    },
-    methods: {
-      login: function () {
-        if (this.email && this.password) {
-        firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
-          (user) => {
-          this.$router.replace('dashboard/welcome')  
-          },
-          (err) => {
-            console.log(err);
-            
-            this.messageToUser = "Login failed: " + err.message
-          }
-        )
-        } else {
-          console.log('nothing entered')
-        }
-
-      }
-    },
-    components: {
-      StandardButton
     }
+  },
+  components: {
+    StandardButton
   }
+};
 </script>
 
 <style scoped>
-
 .login {
-  margin-top: 40px;
+  margin-top: 100px;
+  width: 320px;
+  margin: 100px auto 0 auto;
+  text-align: center;
 }
 
 input {
@@ -75,5 +78,4 @@ button {
   padding: 6px;
   width: auto;
 }
-
 </style>
