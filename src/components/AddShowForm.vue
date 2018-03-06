@@ -91,7 +91,6 @@ export default {
 	},
 	methods: {
 		populateVenueDetails(show) {
-			console.log("Populate venue details, i've been called, and here is the venueID" + show.venueID)
 			this.venueSearch = show.Venue			// adjusting for labels clearer in the UI than they are in the Google Sheet
 			this.showCells.forEach(cell => {
 				if (cell.label !== 'Date' && cell.label !== 'Website') {
@@ -211,7 +210,6 @@ export default {
 							this.showCells[7].content = location.geometry.lat
 							this.showCells[8].content = location.geometry.lng
 							
-							console.log(location.components)
 							if (location.components.city){
 								this.showCells[5].content = `${location.components.city}, ${location.components.state_code}`								
 							} else if (location.components.town) {
@@ -261,7 +259,6 @@ export default {
 			ShowCellsStore.set(index, prop, content)
 		},
 		updateVenueSearch(search){
-			console.log("update venue search called")
 			this.venueSearch = search
 			this.showCells[1].content = search
 		}

@@ -35,7 +35,6 @@ export default {
     },
     confirmTextExists(event){
       this.$emit('changed', event)
-      console.log(event)
     },
     geocode(){
       this.$emit('geocode')

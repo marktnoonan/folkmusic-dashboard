@@ -50,14 +50,11 @@ export default {
 			firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/showsToAdd')
 			.once('value', function (snap) {
 				showsToAdd = snap.val() || []
-				console.log(showsToAdd)
 				for (let show in showsToAdd){
 					firebase.database().ref('public/' + linkID).push(showsToAdd[show])				
 				}
 			})
-			console.log("making public link here: " + linkID)
 			firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/public-id').set(linkID)
-
 		}
 	},
 	computed: {

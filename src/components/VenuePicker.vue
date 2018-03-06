@@ -49,7 +49,6 @@ export default {
       this.content = this.venueSearch
     },
     formReset: function () {
-      console.log("formReset happening")  
       this.willBeSelected = 0
       this.showVenueList = true
     }

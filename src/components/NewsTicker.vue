@@ -40,7 +40,6 @@ export default {
 			this.tickerItems.push({key: Date.now(), text: ""})
 		},
 		removeItem(index) {
-			console.log("remove item " + index)
 			this.tickerItems.splice(index, 1)
 		},
 		undoChanges() {
