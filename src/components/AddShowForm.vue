@@ -91,7 +91,7 @@ export default {
 	},
 	methods: {
 		populateVenueDetails(show) {
-			console.log("Populate venue details, i've been called")
+			console.log("Populate venue details, i've been called, and here is the venueID" + show.venueID)
 			this.venueSearch = show.Venue			// adjusting for labels clearer in the UI than they are in the Google Sheet
 			this.showCells.forEach(cell => {
 				if (cell.label !== 'Date' && cell.label !== 'Website') {

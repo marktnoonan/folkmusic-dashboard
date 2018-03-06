@@ -1,5 +1,7 @@
 <template>
   <div>
+    <h2> News </h2>
+    <display-news-ticker />
     <h2>Shows</h2>
     <div v-if="shows.length">
       <gig-listing v-for="(show, i) in shows" :key="show[0] + i" :show="show"/>
@@ -10,6 +12,7 @@
 <script>
 import firebase from 'firebase'
 import GigListing from './GigListing'
+import DisplayNewsTicker from './DisplayNewsTicker'
 
   export default {
     data() {
@@ -19,7 +22,8 @@ import GigListing from './GigListing'
       }
     },
     components: {
-      GigListing
+      GigListing,
+      DisplayNewsTicker
       },
     methods: {
       fetchPublicShows (id) {

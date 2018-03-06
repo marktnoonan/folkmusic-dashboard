@@ -8,7 +8,7 @@
       <li v-if="!publicID"><small-button :onClick="makePublicLink">Create Public URL</small-button></li>			
       <li><small-button :onClick="logout">Log Out</small-button></li>
     </ul>
-		<span class="public-url">View your calendar and news ticker on the web at
+		<span v-if="this.publicURL" class="public-url">View your calendar and news ticker on the web at
 			<a :href="this.publicURL" target="_blank">{{this.publicURL}}</a>
 		</span>
 		<transition name="fade">
@@ -63,7 +63,7 @@ export default {
 	computed: {
 		publicURL () {
 			if (this.publicID) {
-				return "https://markthomasnoonan.com/public-gigs.html?" + this.publicID
+				return "https://markthomasnoonan.com/folkmusic-dashboard/public/" + this.publicID
 			}
 		}
 	},

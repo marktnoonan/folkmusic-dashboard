@@ -78,12 +78,21 @@ let router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
+  console.log(to)    
   let currentUser = firebase.auth().currentUser
   let requiresAuth = to.matched.some(record => record.meta.requiresAuth)
 
-  if (requiresAuth && !currentUser) next('login')
-  else if (!requiresAuth && currentUser) next('/dashboard')
-  else next()
+  if (requiresAuth && !currentUser) {
+    next('login')
+  } else if (to.path.includes('/public')) {
+    next()
+  } else if (!requiresAuth && currentUser) {
+    // not sure I really need this guard.. but it stops people ending up at routes that don't exist.
+    // maybe we should direct them to a 404 state within this?
+    next('/dashboard')
+  } else {
+    next()
+  }
 })
 
 export default router

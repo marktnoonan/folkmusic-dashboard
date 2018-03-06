@@ -60,7 +60,7 @@ export default {
 		
 		let vm = this
 		this.tickerRef.once("value").then(function(snap) {
-			if (snap.val()){
+			if (snap.val().length){
 						vm.tickerItems = snap.val()
 			}	else {
 			firebase.database().ref('news-ticker-defaults').once('value').then(

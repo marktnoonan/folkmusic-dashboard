@@ -53,7 +53,9 @@ export default {
 		longestItem() {
 			// check that the array has been populated from the database,
 			// then sort it by length and return the first item in the 
-			// sorted array
+			// sorted array. This not 100% bulletproof because spacing 
+			// and character width can cause a longer string to not generate newlines
+			// where a shorter string does.
 			if (this.tickerItems){
 				let tempItems = [...this.tickerItems]
 				return tempItems.sort(function(a, b) {
