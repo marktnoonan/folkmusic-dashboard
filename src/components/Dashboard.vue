@@ -1,13 +1,15 @@
 <template>
   <div class="dash">
-      <ul class="menu">
-      <li><router-link to="/dashboard/add-show">Add A Show</router-link></li>
-      <li><router-link to="/dashboard/venues">Stored Venues</router-link></li>
-      <li><router-link to="/dashboard/news-ticker">Edit News Ticker</router-link></li>
-      <li><router-link to="/dashboard/display-news-ticker">Preview News Ticker</router-link></li>
-      <li v-if="!publicID"><small-button :onClick="makePublicLink">Create Public URL</small-button></li>			
-      <li><small-button :onClick="logout">Log Out</small-button></li>
-    </ul>
+		<nav>
+			<ul class="menu">
+				<li><router-link to="/dashboard/add-show">Add A Show</router-link></li>
+				<li><router-link to="/dashboard/venues">Stored Venues</router-link></li>
+				<li><router-link to="/dashboard/news-ticker">Edit News Ticker</router-link></li>
+				<li><router-link to="/dashboard/display-news-ticker">Preview News Ticker</router-link></li>
+				<li v-if="!publicID"><small-button :onClick="makePublicLink">Create Public URL</small-button></li>			
+				<li><small-button :onClick="logout">Log Out</small-button></li>
+  	  </ul>
+		</nav>      
 		<span v-if="this.publicURL" class="public-url">View your calendar and news ticker on the web at
 			<a :href="this.publicURL" target="_blank">{{this.publicURL}}</a>
 		</span>
@@ -32,7 +34,7 @@ export default {
 			safeToAddShow: false,
       successMessage: '',
 			newsTickerItems: [],
-			publicID: ''
+			publicID: ''			
 		};
 	},
 	methods: {
@@ -80,21 +82,27 @@ export default {
 </script>
 
 <style scoped>
+
+nav {
+	  background-color: rgb(180, 186, 186);
+
+}
+
 h1,
 h2 {
 	font-weight: normal;
 }
 ul {
+	margin: 0 0 20px 0;
 	list-style-type: none;
-	padding: 0;
-  padding-top: 10px;
+  padding: 0 0 10px 0;
 }
 li {
 	display: inline-block;
 	margin: 0 10px;
 }
 a {
-	color: rgb(21, 95, 105);
+  color: #2c3e50;
   text-decoration: none;
   font-weight: bold;
 }

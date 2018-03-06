@@ -1,6 +1,8 @@
 <template>
   <div id="app">
+    <header>      
     <h1 class="main-title">Folkmusic.com Dashboard</h1>
+    </header>
     <router-view/>
   </div>
 </template>
@@ -18,8 +20,14 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: left;
   color: #2c3e50;
-  margin-top: 10px;
 }
+
+header {
+  background-color: rgb(180, 186, 186);
+  padding: 10px 10px 0 10px;
+  margin-top: 0;
+}
+
 .date-input {
   width: 100%;
   padding: 4px;
@@ -28,10 +36,10 @@ export default {
   border: 1px solid #575757;
 }
 .main-title {
-  margin-bottom: 0;
+  margin: 0;
 }
 
-* {
+input, textarea {
   box-sizing: border-box;
   border-radius: 3px;
 }

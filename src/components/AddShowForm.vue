@@ -1,6 +1,7 @@
 <template>
 
 <div class="wrapper">
+	<h2> Add A Show </h2>
 	<form autocomplete="off" @submit.prevent="onSubmit">
 		<div class="date-picker-container">
 			<!-- this should really be a label, but that was causing unwanted behavior
@@ -287,6 +288,7 @@ export default {
 
 .wrapper {
 	vertical-align: top;
+	margin: 0 10px 0 10px;
 }
 
 .date-picker-container {

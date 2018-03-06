@@ -55,12 +55,13 @@ export default {
 	},
 	mounted() {
 
-		this.tickerRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/news-ticker-items')
-		
+		this.tickerRef = firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/news-ticker-items')		
 		let vm = this
 		this.tickerRef.once("value").then(function(snap) {
 			if (snap.val() !== null){
-						vm.tickerItems = snap.val()
+						snap.val().forEach(tickerItem => {
+							vm.tickerItems.push(tickerItem)
+						})
 			}	else {
 			firebase.database().ref('news-ticker-defaults').once('value').then(
 				function(defaultSnap){

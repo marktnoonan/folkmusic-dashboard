@@ -1,5 +1,6 @@
 <template>
   <div class="venue-container" v-if="dataLoaded">
+    <h2> Stored Venues </h2>
     <label>
       Search for a venue by name:<br /> 
           <input type="text" v-model="venueSearch" /> 
@@ -151,6 +152,9 @@ export default {
 </script>
 
 <style scoped>
+.venue-container {
+  margin: 0 10px 0 10px;
+}
 
 .venue-listing {
   display: block;
@@ -160,7 +164,7 @@ export default {
   border-radius: 4px; */
 }
 
-label, input, textarea {
+input, textarea {
   display: block;
   padding: 10px;
 	font-size: 0.9em;
