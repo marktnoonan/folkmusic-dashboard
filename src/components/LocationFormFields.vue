@@ -72,4 +72,18 @@ label {
 	display: block;
 	margin-bottom: 10px;
 }
+
+@media (max-width:530px) {
+	span {
+		display: block !important; 
+	}
+  input,
+  textarea {
+    width: 100%
+  }
+  label {
+    text-align: left;
+  }
+}
+
 </style>

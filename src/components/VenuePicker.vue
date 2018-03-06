@@ -151,5 +151,20 @@ li {
 	color: #fff;
 }
 
-
+@media (max-width:530px) {
+	span {
+		display: block !important; 
+	}
+  input {
+    width: 100%;
+		margin-top: 3px;
+  }
+  label {
+    text-align: left;
+  }
+	.venue-ul {
+		transform: translateY(-16px);
+		width: 90vw;
+	}
+}
 </style>

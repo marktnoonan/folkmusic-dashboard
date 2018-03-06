@@ -119,4 +119,19 @@ textarea {
 .form-error {
 	box-shadow: 0px 0px 2px 2px orangered;
 }
+@media (max-width:530px) {
+	span {
+		display: block !important; 
+	}
+  input,
+  textarea {
+    width: 100%;
+    margin-top: 3px;
+  }
+  label {
+    text-align: left;
+  }
+}
+
+
 </style>

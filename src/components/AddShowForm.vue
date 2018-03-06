@@ -10,7 +10,6 @@
 				v-model="showCells[0].content" 
 				lang="en" 
 				input-class="date-input"
-				width="400"
 				@input="confirmDateExists"
 				></date-picker>
 		</div>
@@ -40,7 +39,7 @@
 	</div>
 
 </form>
-	<div class="shows-added-container">
+	<div v-if="this.showsAddedThisSession.length" class="shows-added-container">
 		<h3>Shows Added</h3>
 		<!-- <ul class="shows-added-list"> -->
 			<!-- <li v-for="(show, index) in showsAddedThisSession" :key="show[0]+index">{{show[0]}} - {{show[1]}}, {{show[5]}}</li> -->
@@ -83,7 +82,8 @@ export default {
 			isModalVisible: false,
 			modalMessage: '',
 			venueSearch: '',
-			formReset: false
+			formReset: false,
+			
 		}
 	},
 	props: {},
@@ -284,7 +284,17 @@ export default {
 .shows-added-container {
 	position: absolute;
 	display: inline-block;
-	width: 400px;
+	min-width: 240px;
+	max-width: 400px;
+}
+
+.wrapper {
+	vertical-align: top;
+}
+
+.date-picker-container {
+	text-align: left;
+	margin-left: 76px;
 }
 
 span {
@@ -359,5 +369,23 @@ h3 {
 	position: absolute;
 	border-radius: 0;
 }
+
+@media (max-width:530px) {
+		span {
+			display: block !important; 
+		}
+		form {
+			display: block;
+			width: 90vw;
+			margin: auto;
+		}
+		.shows-added-container {
+			display: block;
+		}
+		.date-picker-container {
+			margin-left: 0;
+		}
+  }
+
 
 </style>
