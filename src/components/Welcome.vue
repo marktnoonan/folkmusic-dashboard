@@ -7,15 +7,15 @@
 </template>
 
 <script>
-import UserStore from '../stores/UserStore.js'
+import UserStore from "../stores/UserStore.js";
 
-  export default {
-    data() {
-      return {
-        user: UserStore.state
-      }
-    }
+export default {
+  data() {
+    return {
+      user: UserStore.state
+    };
   }
+};
 </script>
 
 <style scoped>

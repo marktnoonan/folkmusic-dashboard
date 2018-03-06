@@ -75,80 +75,79 @@
 </template>
 
 <script>
+import StandardButton from "./StandardButton";
+import SmallButton from "./SmallButton";
+import VenueStore from "../stores/VenueStore.js";
+import matchSorter, { rankings, caseRankings } from "match-sorter";
 
-import StandardButton from './StandardButton'
-import SmallButton from './SmallButton'
-import VenueStore from '../stores/VenueStore.js'
-import matchSorter, {rankings, caseRankings} from 'match-sorter'
-
-window.VenueStore = VenueStore
-import firebase from 'firebase'
+window.VenueStore = VenueStore;
+import firebase from "firebase";
 export default {
   components: {
     StandardButton,
     SmallButton
   },
-	data() {
-		return {
-      venueSearch: '',
+  data() {
+    return {
+      venueSearch: "",
       currentlyEditing: "",
       userVenues: [],
       dataLoaded: false,
       storeData: VenueStore.data
-		}
+    };
   },
   mounted() {
-    VenueStore.methods.getUserVenues(this, "userVenues")    
+    VenueStore.methods.getUserVenues(this, "userVenues");
   },
   methods: {
     editing(venueID) {
-      return this.currentlyEditing === venueID
+      return this.currentlyEditing === venueID;
     },
-    edit(venueID, id){
-      this.currentlyEditing = venueID
+    edit(venueID, id) {
+      this.currentlyEditing = venueID;
 
       // these just move us to the right place to see which thing we are editing
-      window.location.hash = id
-      window.scrollBy(0, -30)
+      window.location.hash = id;
+      window.scrollBy(0, -30);
     },
     cancelEditing() {
-      this.currentlyEditing = ''
+      this.currentlyEditing = "";
     },
     confirmEditing(venue) {
-      const targetRef = this.getFirebaseRef(venue)
-      targetRef.set(venue)      
+      const targetRef = this.getFirebaseRef(venue);
+      targetRef.set(venue);
     },
-    clearSearch(){
-      this.venueSearch = ''
+    clearSearch() {
+      this.venueSearch = "";
     },
-    remove(venue){
-      const targetRef = this.getFirebaseRef(venue)
-      targetRef.remove(()=>{
-        VenueStore.methods.getUserVenues()
-      })
+    remove(venue) {
+      const targetRef = this.getFirebaseRef(venue);
+      targetRef.remove(() => {
+        VenueStore.methods.getUserVenues();
+      });
     },
-    getFirebaseRef(venue){
-      const venueIndex = venue.fBIndex
-      return firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/venues/' + venueIndex)
-  }
+    getFirebaseRef(venue) {
+      const venueIndex = venue.fBIndex;
+      return firebase
+        .database()
+        .ref(
+          "users/" + firebase.auth().currentUser.uid + "/venues/" + venueIndex
+        );
+    }
   },
   computed: {
-    		filteredVenues() {
-			if (this.venueSearch.length){				
-			return matchSorter(
-				this.userVenues, 
-				this.venueSearch, 
-				{
-					keys: [(venue) => venue.Venue],
-					threshold: matchSorter.rankings.WORD_STARTS_WITH
-					}
-				)
-			} else {
-        return this.userVenues
+    filteredVenues() {
+      if (this.venueSearch.length) {
+        return matchSorter(this.userVenues, this.venueSearch, {
+          keys: [venue => venue.Venue],
+          threshold: matchSorter.rankings.WORD_STARTS_WITH
+        });
+      } else {
+        return this.userVenues;
       }
-		}
+    }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -164,11 +163,12 @@ export default {
   border-radius: 4px; */
 }
 
-input, textarea {
+input,
+textarea {
   display: block;
   padding: 10px;
-	font-size: 0.9em;
-  width: 100%; 
+  font-size: 0.9em;
+  width: 100%;
 }
 
 h3 {
@@ -179,7 +179,7 @@ button {
   margin: 0;
 }
 .cancel {
-	background-color: rgb(225, 134, 134);
+  background-color: rgb(225, 134, 134);
 }
 
 .currently-editing {
@@ -187,19 +187,18 @@ button {
   padding-bottom: 10px;
   border: 1px solid rgba(0, 0, 0, 0.4);
   background-color: rgb(217, 217, 217);
-
 }
 
 .fade-enter-active {
-  transition: opacity .6s;
+  transition: opacity 0.6s;
 }
 
 .fade-leave-active {
-  transition: all 0
+  transition: all 0;
 }
 
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
-
 </style>

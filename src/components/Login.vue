@@ -11,46 +11,46 @@
 </template>
 
 <script>
+import firebase from "firebase";
+import StandardButton from "./StandardButton";
 
-  import firebase from 'firebase'
-  import StandardButton from './StandardButton'
+export default {
+  name: "login",
+  data: function() {
+    return {
+      email: "",
+      password: "",
+      messageToUser: ""
+    };
+  },
+  methods: {
+    login: function() {
+      if (this.email && this.password) {
+        firebase
+          .auth()
+          .signInWithEmailAndPassword(this.email, this.password)
+          .then(
+            user => {
+              this.$router.replace("dashboard/welcome");
+            },
+            err => {
+              console.log(err);
 
-  export default {
-    name: "login",
-    data: function () {
-      return {
-        email: '',
-        password: '',
-        messageToUser: ''
+              this.messageToUser = "Login failed: " + err.message;
+            }
+          );
+      } else {
+        console.log("nothing entered");
       }
-    },
-    methods: {
-      login: function () {
-        if (this.email && this.password) {
-        firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
-          (user) => {
-          this.$router.replace('dashboard/welcome')  
-          },
-          (err) => {
-            console.log(err);
-            
-            this.messageToUser = "Login failed: " + err.message
-          }
-        )
-        } else {
-          console.log('nothing entered')
-        }
-
-      }
-    },
-    components: {
-      StandardButton
     }
+  },
+  components: {
+    StandardButton
   }
+};
 </script>
 
 <style scoped>
-
 .login {
   margin-top: 40px;
 }
@@ -75,5 +75,4 @@ button {
   padding: 6px;
   width: auto;
 }
-
 </style>

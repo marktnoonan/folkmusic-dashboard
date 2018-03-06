@@ -9,8 +9,8 @@
 
 <script>
 export default {
-  name: 'app'
-  }
+  name: "app"
+};
 </script>
 
 <style>
@@ -39,13 +39,14 @@ header {
   margin: 0;
 }
 
-input, textarea {
+input,
+textarea {
   box-sizing: border-box;
   border-radius: 3px;
 }
 
-input, textarea {
-    border: 1px solid #575757;
+input,
+textarea {
+  border: 1px solid #575757;
 }
-
 </style>

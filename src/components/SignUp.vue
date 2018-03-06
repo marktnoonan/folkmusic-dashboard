@@ -9,46 +9,52 @@
 </template>
 
 <script>
+import firebase from "firebase";
+import StandardButton from "./StandardButton";
 
-  import firebase from 'firebase'
-  import StandardButton from './StandardButton'
-
-  export default {
-    name: "signUp",
-    data: function () {
-      return {
-        name: '',
-        email: '',
-        password: ''
-      }
-    },
-    methods: {
-      signUp(){
-        const vm = this
-        firebase.auth().createUserWithEmailAndPassword(this.email, this.password).then(
+export default {
+  name: "signUp",
+  data: function() {
+    return {
+      name: "",
+      email: "",
+      password: ""
+    };
+  },
+  methods: {
+    signUp() {
+      const vm = this;
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(this.email, this.password)
+        .then(
           function(user) {
-            vm.$router.replace('dashboard')
+            vm.$router.replace("dashboard");
             if (vm.name) {
-              firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/name').set(vm.name)
+              firebase
+                .database()
+                .ref("users/" + firebase.auth().currentUser.uid + "/name")
+                .set(vm.name);
             }
-          }, function(err) {
+          },
+          function(err) {
             alert(
-            `A screwup of some kind took place!
+              `A screwup of some kind took place!
 
             Please make sure that your email address is correctly formatted,
-            and the password is 6 or more characters long. `)
+            and the password is 6 or more characters long. `
+            );
           }
-      )
-      }
-    },
-    components: {
-      StandardButton
+        );
     }
+  },
+  components: {
+    StandardButton
   }
+};
 </script>
 
 <style scoped>
-
 .login {
   margin-top: 40px;
 }
@@ -65,5 +71,4 @@ button {
   width: 10%;
   cursor: pointer;
 }
-
 </style>

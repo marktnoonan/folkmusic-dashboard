@@ -1,10 +1,10 @@
 # folkmusic-dashboard
 
-> Admin 
+> Admin
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
