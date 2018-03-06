@@ -1,7 +1,7 @@
 <template>
 <div class="ticker-wrapper">
 <div class="ticker-size-guide">
-  <span v-if="longestItem">{{longestItem.text}}</span>
+  <span v-if="longestItem">{{longestItem.text}} AND SOME PADDING CHARS</span>
 </div>
 <div class="ticker-item-location">
   <!--

@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="wrapper">
 	<display-news-ticker />
 <h4>News Ticker Items</h4>
 <div v-for="(item, index) in tickerItems" :key="item.key">
@@ -60,7 +60,7 @@ export default {
 		
 		let vm = this
 		this.tickerRef.once("value").then(function(snap) {
-			if (snap.val().length){
+			if (snap.val() !== null){
 						vm.tickerItems = snap.val()
 			}	else {
 			firebase.database().ref('news-ticker-defaults').once('value').then(
@@ -76,10 +76,14 @@ export default {
 </script>
 
 <style scoped>
+.wrapper {
+	width: 500px;
+	margin: auto;
+}
 textarea {
 	padding: 10px;
 	font-size: 0.9em;
-	width: 400px;
+	width: 90%;
 	margin: 10px;
 	resize: none;
 }
@@ -96,6 +100,12 @@ textarea {
 
 .reset {
 	background-color: rgb(225, 134, 134);
+}
+
+@media (max-width:530px) {
+	.wrapper {
+		width: 100%;
+	}
 }
 
 </style>
