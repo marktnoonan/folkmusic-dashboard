@@ -2,7 +2,7 @@
   <div>
     <h2>Shows</h2>
     <div v-if="shows.length">
-      <gig-listing v-for="show in shows" :key="show[0]" :show="show"/>
+      <gig-listing v-for="(show, i) in shows" :key="show[0] + i" :show="show"/>
     </div>
   </div>
 </template>
@@ -21,25 +21,25 @@ import GigListing from './GigListing'
     components: {
       GigListing
       },
+    methods: {
+      fetchPublicShows (id) {
+        const vm = this
+        firebase.database().ref('public/' + id).once('value', function (snap) {
+          vm.shows = []
+          const showsObj = snap.val()
+          for (let show in showsObj) {
+            vm.shows.push(showsObj[show])
+          }        
+        })
+      }
+    },
     mounted() {
-      const vm = this;
-      firebase.database().ref('public/' + this.publicID).once('value', function (snap) {
-        const showsObj = snap.val()
-        for (let show in showsObj) {
-          vm.shows.push(showsObj[show])
-        }        
-//        vm.shows = snap.val() || []
-        console.log("I did at least connect to firebase")
-      })
+      this.fetchPublicShows(this.publicID)
     },
     watch: {
     $route: function (to, from) {
       this.publicID = to.params.publicID
-      const vm = this;
-      firebase.database().ref('public/' + to.params.publicID).once('value', function (snap) {        
-        vm.shows = snap.val() || []
-        console.log("I did at least connect to firebase")
-      })
+      this.fetchPublicShows(to.params.publicID)
       }
     } 
   }
