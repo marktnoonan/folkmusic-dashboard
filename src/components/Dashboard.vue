@@ -22,122 +22,122 @@
 </template>
 
 <script>
-import firebase from "firebase";
-import StandardButton from "./StandardButton";
-import SmallButton from "./SmallButton";
-import shortid from "shortid";
+import firebase from 'firebase'
+import StandardButton from './StandardButton'
+import SmallButton from './SmallButton'
+import shortid from 'shortid'
 
 export default {
-  name: "Dashboard",
-  data() {
-    return {
-      safeToAddShow: false,
-      successMessage: "",
-      newsTickerItems: [],
-      publicID: ""
-    };
-  },
-  methods: {
-    logout: function() {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          this.$router.replace("login");
-        });
-    },
-    makePublicLink: function() {
-      const linkID = shortid.generate();
-      let showsToAdd = [];
-      firebase
-        .database()
-        .ref("users/" + firebase.auth().currentUser.uid + "/showsToAdd")
-        .once("value", function(snap) {
-          showsToAdd = snap.val() || [];
-          for (let show in showsToAdd) {
-            firebase
-              .database()
-              .ref("public/" + linkID)
-              .push(showsToAdd[show]);
-          }
-        });
-      firebase
-        .database()
-        .ref("users/" + firebase.auth().currentUser.uid + "/public-id")
-        .set(linkID);
-      this.publicID = linkID;
-    }
-  },
-  computed: {
-    publicURL() {
-      if (this.publicID) {
-        return (
-          "https://markthomasnoonan.com/folkmusic-dashboard/#/public/" +
-          this.publicID
-        );
-      }
-    }
-  },
-  mounted() {
-    const vm = this;
-    firebase
-      .database()
-      .ref("users/" + firebase.auth().currentUser.uid + "/public-id")
-      .once("value", function(snap) {
-        vm.publicID = snap.val() || null;
-      });
-  },
-  components: {
-    StandardButton,
-    SmallButton
-  }
-};
+	name: 'Dashboard',
+	data() {
+		return {
+			safeToAddShow: false,
+			successMessage: '',
+			newsTickerItems: [],
+			publicID: ''
+		}
+	},
+	methods: {
+		logout: function() {
+			firebase
+				.auth()
+				.signOut()
+				.then(() => {
+					this.$router.replace('login')
+				})
+		},
+		makePublicLink: function() {
+			const linkID = shortid.generate()
+			let showsToAdd = []
+			firebase
+				.database()
+				.ref('users/' + firebase.auth().currentUser.uid + '/showsToAdd')
+				.once('value', function(snap) {
+					showsToAdd = snap.val() || []
+					for (let show in showsToAdd) {
+						firebase
+							.database()
+							.ref('public/' + linkID)
+							.push(showsToAdd[show])
+					}
+				})
+			firebase
+				.database()
+				.ref('users/' + firebase.auth().currentUser.uid + '/public-id')
+				.set(linkID)
+			this.publicID = linkID
+		}
+	},
+	computed: {
+		publicURL() {
+			if (this.publicID) {
+				return (
+					'https://markthomasnoonan.com/folkmusic-dashboard/#/public/' +
+					this.publicID
+				)
+			}
+		}
+	},
+	mounted() {
+		const vm = this
+		firebase
+			.database()
+			.ref('users/' + firebase.auth().currentUser.uid + '/public-id')
+			.once('value', function(snap) {
+				vm.publicID = snap.val() || null
+			})
+	},
+	components: {
+		StandardButton,
+		SmallButton
+	}
+}
 </script>
 
 <style scoped>
 nav {
-  background-color: rgb(180, 186, 186);
+	background-color: rgb(180, 186, 186);
 }
 
 h1,
 h2 {
-  font-weight: normal;
+	font-weight: normal;
 }
 ul {
-  margin: 0 0 20px 0;
-  list-style-type: none;
-  padding: 0 0 10px 0;
+	margin: 0 0 20px 0;
+	list-style-type: none;
+	padding: 0 0 10px 0;
 }
 li {
-  display: inline-block;
-  margin: 0 10px;
+	display: inline-block;
+	margin: 0 10px;
 }
 a {
-  color: #2c3e50;
-  text-decoration: none;
-  font-weight: bold;
+	color: #2c3e50;
+	text-decoration: none;
+	font-weight: bold;
 }
 
 .public-url {
-  display: block;
-  margin: 0 auto 10px auto;
-  width: 80vw;
-  text-align: center;
-  word-wrap: break-word;
-  border: 1px solid green;
-  padding: 4px;
-  border-radius: 3px;
+	display: block;
+	margin: 0 auto 10px auto;
+	width: 80vw;
+	text-align: center;
+	word-wrap: break-word;
+	border: 1px solid green;
+	padding: 4px;
+	border-radius: 3px;
 }
 
 .fade-enter-active {
-  transition: opacity 0.3s;
+	transition: opacity 0.3s;
 }
 .fade-leave-active {
-  transition: all 0;
+	transition: all 0;
 }
 
 .fade-enter,
 .fade-leave-to {
-  opacity: 0;
+	opacity: 0;
 }
 </style>

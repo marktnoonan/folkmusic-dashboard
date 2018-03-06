@@ -16,71 +16,71 @@
 </template>
 
 <script>
-import FmInput from "./FmInput";
-import ShowCellsStore from "../stores/ShowCellsStore.js";
+import FmInput from './FmInput'
+import ShowCellsStore from '../stores/ShowCellsStore.js'
 
 export default {
-  data() {
-    return {
-      showCells: ShowCellsStore.state.showCells,
-      addressDetails: ""
-    };
-  },
-  components: {
-    FmInput
-  },
-  methods: {
-    updateForm(index, prop, content) {
-      this.$emit("entered", [index, prop, content]);
-    },
-    confirmTextExists(event) {
-      this.$emit("changed", event);
-    },
-    geocode() {
-      this.$emit("geocode");
-    }
-  }
-};
+	data() {
+		return {
+			showCells: ShowCellsStore.state.showCells,
+			addressDetails: ''
+		}
+	},
+	components: {
+		FmInput
+	},
+	methods: {
+		updateForm(index, prop, content) {
+			this.$emit('entered', [index, prop, content])
+		},
+		confirmTextExists(event) {
+			this.$emit('changed', event)
+		},
+		geocode() {
+			this.$emit('geocode')
+		}
+	}
+}
 </script>
 
 <style scoped>
 fieldset {
-  border: 0;
-  padding: 0;
+	border: 0;
+	padding: 0;
 }
 
 input,
 textarea {
-  padding: 3px;
-  font-size: 0.9em;
-  width: 100%;
+	padding: 3px;
+	font-size: 0.9em;
+	width: 100%;
 }
 
 textarea {
-  resize: none;
+	resize: none;
 }
 
 label {
-  display: block;
-  text-align: right;
+	display: block;
+	text-align: right;
 }
 
 .address-details {
-  color: darkcyan;
-  display: block;
-  margin-bottom: 10px;
+	color: darkcyan;
+	display: block;
+	margin-bottom: 10px;
 }
 
 @media (max-width: 530px) {
-  span {
-    display: block !important;
-  }
-  input,
-  textarea {
-    width: 100%;
-  }
-  label {
-    text-align: left;
-  }
+	span {
+		display: block !important;
+	}
+	input,
+	textarea {
+		width: 100%;
+	}
+	label {
+		text-align: left;
+	}
 }
 </style>

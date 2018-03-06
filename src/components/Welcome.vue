@@ -7,19 +7,19 @@
 </template>
 
 <script>
-import UserStore from "../stores/UserStore.js";
+import UserStore from '../stores/UserStore.js'
 
 export default {
-  data() {
-    return {
-      user: UserStore.state
-    };
-  }
-};
+	data() {
+		return {
+			user: UserStore.state
+		}
+	}
+}
 </script>
 
 <style scoped>
 .welcome {
-  margin: 10px;
+	margin: 10px;
 }
 </style>

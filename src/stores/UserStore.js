@@ -1,10 +1,10 @@
 const UserStore = {
-  state: {
-    username: ""
-  },
-  set(prop, payload) {
-    this.state[prop] = payload;
-  }
-};
+	state: {
+		username: ''
+	},
+	set(prop, payload) {
+		this.state[prop] = payload
+	}
+}
 
-export default UserStore;
+export default UserStore

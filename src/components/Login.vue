@@ -11,71 +11,71 @@
 </template>
 
 <script>
-import firebase from "firebase";
-import StandardButton from "./StandardButton";
+import firebase from 'firebase'
+import StandardButton from './StandardButton'
 
 export default {
-  name: "login",
-  data: function() {
-    return {
-      email: "",
-      password: "",
-      messageToUser: ""
-    };
-  },
-  methods: {
-    login: function() {
-      if (this.email && this.password) {
-        firebase
-          .auth()
-          .signInWithEmailAndPassword(this.email, this.password)
-          .then(
-            user => {
-              this.$router.replace("dashboard/welcome");
-            },
-            err => {
-              console.log(err);
+	name: 'login',
+	data: function() {
+		return {
+			email: '',
+			password: '',
+			messageToUser: ''
+		}
+	},
+	methods: {
+		login: function() {
+			if (this.email && this.password) {
+				firebase
+					.auth()
+					.signInWithEmailAndPassword(this.email, this.password)
+					.then(
+						user => {
+							this.$router.replace('dashboard/welcome')
+						},
+						err => {
+							console.log(err)
 
-              this.messageToUser = "Login failed: " + err.message;
-            }
-          );
-      } else {
-        console.log("nothing entered");
-      }
-    }
-  },
-  components: {
-    StandardButton
-  }
-};
+							this.messageToUser = 'Login failed: ' + err.message
+						}
+					)
+			} else {
+				console.log('nothing entered')
+			}
+		}
+	},
+	components: {
+		StandardButton
+	}
+}
 </script>
 
 <style scoped>
 .login {
-  margin-top: 100px;
-  width: 320px;
-  margin: 100px auto 0 auto;
-  text-align: center;
+	margin-top: 100px;
+	width: 320px;
+	margin: 100px auto 0 auto;
+	text-align: center;
 }
 
 input {
-  margin: 10px 0;
-  width: 200px;
-  padding: 15px;
-  font-size: 16px;
+	margin: 10px 0;
+	width: 200px;
+	padding: 15px;
+	font-size: 16px;
 }
 
 button {
-  margin-top: 20px;
-  width: 10%;
-  cursor: pointer;
-  min-width: 80px;
+	margin-top: 20px;
+	width: 10%;
+	cursor: pointer;
+	min-width: 80px;
 }
 
 .message-to-user {
-  margin: 10px;
-  border: 2px solid orangered;
-  padding: 6px;
-  width: auto;
+	margin: 10px;
+	border: 2px solid orangered;
+	padding: 6px;
+	width: auto;
 }
 </style>

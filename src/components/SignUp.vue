@@ -9,66 +9,66 @@
 </template>
 
 <script>
-import firebase from "firebase";
-import StandardButton from "./StandardButton";
+import firebase from 'firebase'
+import StandardButton from './StandardButton'
 
 export default {
-  name: "signUp",
-  data: function() {
-    return {
-      name: "",
-      email: "",
-      password: ""
-    };
-  },
-  methods: {
-    signUp() {
-      const vm = this;
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(this.email, this.password)
-        .then(
-          function(user) {
-            vm.$router.replace("dashboard");
-            if (vm.name) {
-              firebase
-                .database()
-                .ref("users/" + firebase.auth().currentUser.uid + "/name")
-                .set(vm.name);
-            }
-          },
-          function(err) {
-            alert(
-              `A screwup of some kind took place!
+	name: 'signUp',
+	data: function() {
+		return {
+			name: '',
+			email: '',
+			password: ''
+		}
+	},
+	methods: {
+		signUp() {
+			const vm = this
+			firebase
+				.auth()
+				.createUserWithEmailAndPassword(this.email, this.password)
+				.then(
+					function(user) {
+						vm.$router.replace('dashboard')
+						if (vm.name) {
+							firebase
+								.database()
+								.ref('users/' + firebase.auth().currentUser.uid + '/name')
+								.set(vm.name)
+						}
+					},
+					function(err) {
+						alert(
+							`A screwup of some kind took place!
 
             Please make sure that your email address is correctly formatted,
             and the password is 6 or more characters long. `
-            );
-          }
-        );
-    }
-  },
-  components: {
-    StandardButton
-  }
-};
+						)
+					}
+				)
+		}
+	},
+	components: {
+		StandardButton
+	}
+}
 </script>
 
 <style scoped>
 .login {
-  margin-top: 40px;
+	margin-top: 40px;
 }
 
 input {
-  margin: 10px 0;
-  width: 200px;
-  padding: 15px;
-  font-size: 16px;
+	margin: 10px 0;
+	width: 200px;
+	padding: 15px;
+	font-size: 16px;
 }
 
 button {
-  margin-top: 20px;
-  width: 10%;
-  cursor: pointer;
+	margin-top: 20px;
+	width: 10%;
+	cursor: pointer;
 }
 </style>

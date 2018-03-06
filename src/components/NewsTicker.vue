@@ -20,93 +20,93 @@
 </template>
 
 <script>
-import StandardButton from "./StandardButton";
-import DisplayNewsTicker from "./DisplayNewsTicker";
+import StandardButton from './StandardButton'
+import DisplayNewsTicker from './DisplayNewsTicker'
 
-import firebase from "firebase";
+import firebase from 'firebase'
 
 export default {
-  data() {
-    return {
-      tickerItems: [],
-      tickerRef: null
-    };
-  },
-  methods: {
-    updateFirebase() {
-      this.tickerRef.set(this.tickerItems);
-    },
-    createTickerItem() {
-      this.tickerItems.push({ key: Date.now(), text: "" });
-    },
-    removeItem(index) {
-      this.tickerItems.splice(index, 1);
-    },
-    undoChanges() {
-      let vm = this;
-      this.tickerRef.once("value").then(function(snap) {
-        vm.tickerItems = snap.val();
-      });
-    }
-  },
-  components: {
-    StandardButton,
-    DisplayNewsTicker
-  },
-  mounted() {
-    this.tickerRef = firebase
-      .database()
-      .ref("users/" + firebase.auth().currentUser.uid + "/news-ticker-items");
-    let vm = this;
-    this.tickerRef.once("value").then(function(snap) {
-      if (snap.val() !== null) {
-        snap.val().forEach(tickerItem => {
-          vm.tickerItems.push(tickerItem);
-        });
-      } else {
-        firebase
-          .database()
-          .ref("news-ticker-defaults")
-          .once("value")
-          .then(function(defaultSnap) {
-            vm.tickerRef.set(defaultSnap.val());
-          });
-      }
-    });
-  }
-};
+	data() {
+		return {
+			tickerItems: [],
+			tickerRef: null
+		}
+	},
+	methods: {
+		updateFirebase() {
+			this.tickerRef.set(this.tickerItems)
+		},
+		createTickerItem() {
+			this.tickerItems.push({key: Date.now(), text: ''})
+		},
+		removeItem(index) {
+			this.tickerItems.splice(index, 1)
+		},
+		undoChanges() {
+			let vm = this
+			this.tickerRef.once('value').then(function(snap) {
+				vm.tickerItems = snap.val()
+			})
+		}
+	},
+	components: {
+		StandardButton,
+		DisplayNewsTicker
+	},
+	mounted() {
+		this.tickerRef = firebase
+			.database()
+			.ref('users/' + firebase.auth().currentUser.uid + '/news-ticker-items')
+		let vm = this
+		this.tickerRef.once('value').then(function(snap) {
+			if (snap.val() !== null) {
+				snap.val().forEach(tickerItem => {
+					vm.tickerItems.push(tickerItem)
+				})
+			} else {
+				firebase
+					.database()
+					.ref('news-ticker-defaults')
+					.once('value')
+					.then(function(defaultSnap) {
+						vm.tickerRef.set(defaultSnap.val())
+					})
+			}
+		})
+	}
+}
 </script>
 
 <style scoped>
 .wrapper {
-  width: 500px;
-  margin: auto;
+	width: 500px;
+	margin: auto;
 }
 textarea {
-  padding: 10px;
-  font-size: 0.9em;
-  width: 90%;
-  margin: 10px;
-  resize: none;
+	padding: 10px;
+	font-size: 0.9em;
+	width: 90%;
+	margin: 10px;
+	resize: none;
 }
 .item-deleter {
-  position: absolute;
-  color: red;
-  cursor: pointer;
-  transform: translate(-5px, 6px);
+	position: absolute;
+	color: red;
+	cursor: pointer;
+	transform: translate(-5px, 6px);
 }
 
 .submit {
-  background-color: rgb(161, 191, 121);
+	background-color: rgb(161, 191, 121);
 }
 
 .reset {
-  background-color: rgb(225, 134, 134);
+	background-color: rgb(225, 134, 134);
 }
 
 @media (max-width: 530px) {
-  .wrapper {
-    width: 100%;
-  }
+	.wrapper {
+		width: 100%;
+	}
 }
 </style>

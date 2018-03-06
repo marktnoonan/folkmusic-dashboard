@@ -7,21 +7,21 @@
     
 </template>
 <script>
-import { ClickHandlerAsProp } from "../helpers";
+import {ClickHandlerAsProp} from '../helpers'
 
 export default {
-  props: {
-    onClick: ClickHandlerAsProp
-  }
-};
+	props: {
+		onClick: ClickHandlerAsProp
+	}
+}
 </script>
 
 
 <style scoped>
-@import "../css/button-base-styles.css";
+@import '../css/button-base-styles.css';
 
 button {
-  padding: 3px;
-  font-size: 12px;
+	padding: 3px;
+	font-size: 12px;
 }
 </style>
