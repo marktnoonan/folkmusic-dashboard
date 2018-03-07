@@ -66,7 +66,7 @@
 	"prettier": {
 		"useTabs": true,
 		"bracketSpacing": false,
-		".semi": false,
+		"semi": false,
 		"singleQuote": true
 	}
 }
