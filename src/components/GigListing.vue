@@ -45,7 +45,7 @@ export default {
 	props: ['show'],
 	methods: {
 		processDate(date) {
-			const strDate = new Date(date).toDateString()
+			const strDate = new Date(date.replace(/-/g, '/')).toDateString()
 			const year = strDate.substring(strDate.length - 4)
 			return {
 				year: strDate.substring(strDate.length - 4),
