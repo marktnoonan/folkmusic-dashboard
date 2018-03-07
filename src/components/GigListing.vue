@@ -1,5 +1,4 @@
 <template>
-
 <div class="gig-listing">
   <div class="year">{{date.year}}</div>
   <div class="date-container">
@@ -26,15 +25,21 @@
     </span>
   </div>
 </div>
-
-
 </template>
 
 <script>
 export default {
 	data() {
 		return {
-			date: {}
+			date: {},
+			showDetails: {
+				venue: this.show[1],
+				description: this.show[2],
+				phone: this.show[3],
+				url: this.show[4],
+				city: this.show[5],
+				fullAddress: this.show[6]
+			}
 		}
 	},
 	props: ['show'],
@@ -42,39 +47,12 @@ export default {
 		processDate(date) {
 			const strDate = new Date(date).toDateString()
 			const year = strDate.substring(strDate.length - 4)
-
 			return {
-				date: {}
+				year: strDate.substring(strDate.length - 4),
+				day: strDate.substr(0, 3),
+				month: strDate.substr(4, 3),
+				dayOfMonth: strDate.substr(8, 2)
 			}
-		},
-		props: ['show'],
-		methods: {
-			processDate(date) {
-				const strDate = new Date(date).toDateString()
-				const year = strDate.substring(strDate.length - 4)
-
-				return {
-					year: strDate.substring(strDate.length - 4),
-					day: strDate.substr(0, 3),
-					month: strDate.substr(4, 3),
-					dayOfMonth: strDate.substr(8, 2)
-				}
-			}
-		},
-		computed: {
-			showDetails: function() {
-				return {
-					venue: this.show[1],
-					description: this.show[2],
-					phone: this.show[3],
-					url: this.show[4],
-					city: this.show[5],
-					fullAddress: this.show[6]
-				}
-			}
-		},
-		mounted() {
-			this.date = this.processDate(this.show[0])
 		}
 	},
 	mounted() {
