@@ -1,9 +1,10 @@
 <template>
   <div class="login">
-    <h3>Sign Up (for demo)</h3>
+    <h3>Sign Up</h3>
     <input type="text" v-model="name" placeholder="Name (optional)"><br>
     <input type="email" v-model="email" placeholder="Email (required)" required><br>
     <input type="password" v-model="password" placeholder="Password (required)" required><br>
+		(Password should be 6 characters or more.) <br>
     <standard-button :onClick="signUp">Sign Up</standard-button>
   </div>
 </template>
@@ -56,7 +57,10 @@ export default {
 
 <style scoped>
 .login {
-	margin-top: 40px;
+	margin-top: 100px;
+	width: 320px;
+	margin: 100px auto 0 auto;
+	text-align: center;
 }
 
 input {
@@ -70,5 +74,13 @@ button {
 	margin-top: 20px;
 	width: 10%;
 	cursor: pointer;
+	min-width: 80px;
+}
+
+.message-to-user {
+	margin: 10px;
+	border: 2px solid orangered;
+	padding: 6px;
+	width: auto;
 }
 </style>

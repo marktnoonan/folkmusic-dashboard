@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <header>      
-    <h1 class="main-title">Folkmusic.com Dashboard</h1>
+    <h1 class="main-title"><router-link to="/dashboard">Folkmusic.com Dashboard</router-link></h1>
     </header>
     <router-view/>
   </div>
@@ -20,6 +20,11 @@ export default {
 	-moz-osx-font-smoothing: grayscale;
 	text-align: left;
 	color: #2c3e50;
+}
+
+a {
+	color: #2c3e50;
+	text-decoration: none;
 }
 
 header {
