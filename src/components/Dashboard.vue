@@ -8,6 +8,7 @@
 				<li><router-link to="/dashboard/display-news-ticker">Preview News Ticker</router-link></li>
 				<li v-if="!publicID"><small-button :onClick="makePublicLink">Create Public URL</small-button></li>			
 				<li><small-button :onClick="logout">Log Out</small-button></li>
+				<li><span class="logged-in-as">Logged in as {{user.username}}</span></li>				
   	  </ul>
 		</nav>      
 		<span v-if="this.publicURL" class="public-url">Public URL: 
@@ -26,6 +27,7 @@ import firebase from 'firebase'
 import StandardButton from './StandardButton'
 import SmallButton from './SmallButton'
 import shortid from 'shortid'
+import UserStore from '../stores/UserStore.js'
 
 export default {
 	name: 'Dashboard',
@@ -34,7 +36,8 @@ export default {
 			safeToAddShow: false,
 			successMessage: '',
 			newsTickerItems: [],
-			publicID: ''
+			publicID: '',
+			user: UserStore.state
 		}
 	},
 	methods: {
@@ -127,6 +130,10 @@ a {
 	border: 1px solid green;
 	padding: 4px;
 	border-radius: 3px;
+}
+
+.logged-in-as {
+	font-size: 12px;
 }
 
 .fade-enter-active {

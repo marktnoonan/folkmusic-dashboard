@@ -24,7 +24,7 @@ export default {
 
 header {
 	background-color: rgb(180, 186, 186);
-	padding: 10px 10px 0 10px;
+	padding: 10px;
 	margin-top: 0;
 }
 
