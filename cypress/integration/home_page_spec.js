@@ -1,6 +1,6 @@
 describe('The Home Page', function() {
 	it('successfully loads', function() {
-		cy.visit('http://localhost:8080/#/dashboard/')
+		cy.visit('http://localhost:8080/#/')
 	})
 
 	it('logs the user in', function() {

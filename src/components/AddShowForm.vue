@@ -51,6 +51,7 @@
 	<modal
 		v-show="isModalVisible"
 		@close="closeModal"
+		@clearMessage="clearModalMessage"
 	>
 		<div slot="body">{{modalMessage}}</div>
 	</modal>
@@ -103,7 +104,7 @@ export default {
 				}
 			})
 		},
-		onSubmit() {
+		onSubmit(event) {
 			document.querySelector('.submit').blur()
 			if (this.showCells[1].content === '' && this.venueSearch === '') {
 				this.addFormError('.venue-name > input')
@@ -260,6 +261,9 @@ export default {
 		},
 		closeModal() {
 			this.isModalVisible = false
+		},
+		clearModalMessage() {
+			console.log('clear modal called')
 			this.modalMessage = ''
 		},
 		updateForm(index, prop, content) {
@@ -279,6 +283,21 @@ export default {
 		DatePicker,
 		GigListing,
 		Modal
+	},
+	watch: {
+		isModalVisible: function() {
+			const vm = this
+			const handleEnter = function(event) {
+				if (event.key === 'Enter') {
+					event.preventDefault()
+					vm.closeModal()
+					window.removeEventListener('keypress', handleEnter, false)
+				}
+			}
+			if (this.isModalVisible) {
+				window.addEventListener('keypress', handleEnter, false)
+			}
+		}
 	}
 }
 </script>

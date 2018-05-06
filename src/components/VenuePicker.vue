@@ -69,7 +69,11 @@ export default {
 			}
 		},
 		confirmSelection(event) {
-			this.populateVenueDetails(this.possibleVenues[this.willBeSelected])
+			console.log('confirmed', event)
+			event.preventDefault()
+			if (this.possibleVenues) {
+				this.populateVenueDetails(this.possibleVenues[this.willBeSelected])
+			}
 		},
 		confirmTextExists(event) {
 			this.$emit('changed', event)

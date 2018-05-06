@@ -30,6 +30,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 				// if they set a name when signing up, we can greet them with it,
 				// otherwise, we use their email address.
 				UserStore.set('username', nameSnap.val() || user.email)
+				UserStore.set('email', user.email)
 			})
 	}
 	if (!user) {

@@ -55,7 +55,7 @@ exports.helloWorld = functions.https.onRequest((request, response) => {
 })
 
 exports.dbTriggerTest = functions.database
-	.ref('/users/0N9SNPfstqftKscuZ5AaqWHMAzp2/showsToAdd/{pushId}')
+	.ref('/users/9RpVQ5X7WTT3gaQOK3XigXDw0183/showsToAdd/{pushId}')
 	.onWrite(event => {
 		console.log('Trigger Test ran' + event.params)
 		const show = event.data.val()
@@ -126,7 +126,7 @@ function appendPromise(requestWithoutAuth) {
 }
 
 const SHEET_ID = '1qBzb28aANiAScJbuDuAmeOukUzZQiIP6wZapF2bPMgw'
-const DATA_PATH = '/users/0N9SNPfstqftKscuZ5AaqWHMAzp2/showsToAdd'
+const DATA_PATH = '/users/9RpVQ5X7WTT3gaQOK3XigXDw0183/showsToAdd'
 
 // trigger function to write to Sheet when new data comes in on DATA_PATH
 exports.appendRecordToSpreadsheet = functions.database

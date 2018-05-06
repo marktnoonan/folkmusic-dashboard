@@ -4,14 +4,14 @@
 			<ul class="menu">
 				<li><router-link to="/dashboard/add-show">Add A Show</router-link></li>
 				<li><router-link to="/dashboard/venues">Stored Venues</router-link></li>
-				<li><router-link to="/dashboard/news-ticker">Edit News Ticker</router-link></li>
-				<li><router-link to="/dashboard/display-news-ticker">Preview News Ticker</router-link></li>
-				<li v-if="!publicID"><small-button :onClick="makePublicLink">Create Public URL</small-button></li>			
+				<li v-if="!isMcC"><router-link to="/dashboard/news-ticker">Edit News Ticker</router-link></li>
+				<li v-if="!isMcC"><router-link to="/dashboard/display-news-ticker">Preview News Ticker</router-link></li>
+				<li v-if="!publicID && !isMcC"><small-button :onClick="makePublicLink">Create Public URL</small-button></li>			
 				<li><small-button :onClick="logout">Log Out</small-button></li>
 				<li><span class="logged-in-as">Logged in as {{user.username}}</span></li>				
   	  </ul>
 		</nav>      
-		<span v-if="this.publicURL" class="public-url">Public URL: 
+		<span v-if="this.publicURL && !isMcC" class="public-url">Public URL: 
 			<a :href="this.publicURL" target="_blank">{{this.publicURL}}</a>
 		</span>
 		<transition name="fade">
@@ -37,7 +37,8 @@ export default {
 			successMessage: '',
 			newsTickerItems: [],
 			publicID: '',
-			user: UserStore.state
+			user: UserStore.state,
+			isMcC: true // This is a flag that protects a real user of the product from incomplete features or demos.
 		}
 	},
 	methods: {
@@ -88,6 +89,12 @@ export default {
 			.ref('users/' + firebase.auth().currentUser.uid + '/public-id')
 			.once('value', function(snap) {
 				vm.publicID = snap.val() || null
+			})
+		firebase
+			.database()
+			.ref('users/' + firebase.auth().currentUser.uid + '/isMcC')
+			.once('value', function(snap) {
+				vm.isMcC = snap.val() || false
 			})
 	},
 	components: {

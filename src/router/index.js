@@ -71,9 +71,10 @@ let router = new Router({
 			component: PublicGigViewer
 		},
 		{
-			path: '/*',
+			path: '/',
 			redirect: '/login'
-		}
+		},
+		{path: '*', redirect: '/login'}
 	]
 })
 

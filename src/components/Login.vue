@@ -20,18 +20,30 @@ export default {
 		return {
 			email: '',
 			password: '',
-			messageToUser: ''
+			messageToUser: '',
+			isMcC: false // flag to avoid real user seeing unfishished features.
 		}
 	},
 	methods: {
 		login: function() {
+			let vm = this
 			if (this.email && this.password) {
 				firebase
 					.auth()
 					.signInWithEmailAndPassword(this.email, this.password)
 					.then(
 						user => {
-							this.$router.replace('dashboard/welcome')
+							firebase
+								.database()
+								.ref('users/' + firebase.auth().currentUser.uid + '/isMcC')
+								.once('value', function(snap) {
+									vm.isMcC = snap.val() || false
+									if (!vm.isMcC) {
+										vm.$router.replace('dashboard/welcome')
+									} else {
+										vm.$router.replace('dashboard/add-show')
+									}
+								})
 						},
 						err => {
 							console.log(err)

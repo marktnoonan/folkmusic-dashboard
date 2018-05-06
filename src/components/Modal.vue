@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal-fade">
+  <transition name="modal-fade" @after-leave="clearMessage">
     <div class="modal-backdrop" @click="close">
       <div class="modal"
         role="dialog"
@@ -48,6 +48,9 @@ export default {
 		},
 		remainOpen(e) {
 			e.stopPropagation()
+		},
+		clearMessage() {
+			this.$emit('clearMessage')
 		}
 	},
 	components: {
